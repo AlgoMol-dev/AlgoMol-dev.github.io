@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlgoMol LLC - Computational Chemistry and Molecular Sciences</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -139,6 +140,72 @@
             margin: 0;
             font-size: 1rem;
         }
+
+        #about p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            color: #f0f0f0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        #services ul li {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            color: #f0f0f0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        #services ul li::before {
+            content: "•";
+            color: #1abc9c;
+            position: absolute;
+            left: 0;
+            font-size: 1.5rem;
+        }
+
+        .social-link {
+            color: #1abc9c;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #16a085;
+            transform: translateY(-2px);
+        }
+
+        .social-link i {
+            font-size: 1.4rem;
+        }
+
+        .footer-social {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-social a {
+            color: #000;
+            margin: 0 10px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: #16a085;
+        }
     </style>
 </head>
 
@@ -156,10 +223,11 @@
     <main>
         <section id="about">
             <h2>About Us</h2>
-            <p>At AlgoMol LLC, we blend the power of advanced computational algorithms and molecular sciences to unlock
-                new possibilities in chemical engineering and molecular research. Our focus is on leveraging quantum
-                mechanics, chemical modeling, and computational chemistry to solve complex challenges and drive
-                innovation forward.</p>
+            <p>Based in Chicago, we blend the power of advanced computational algorithms and molecular sciences to
+                unlock new possibilities in chemical engineering and molecular research.</p>
+
+            <p>Our focus is on leveraging quantum mechanics, chemical modeling, and computational chemistry to
+                solve complex challenges and drive innovation forward.</p>
             <a href="#contact" class="button">Get in Touch</a>
         </section>
 
@@ -173,12 +241,20 @@
 
         <section id="contact">
             <h2>Contact Us</h2>
-            <p>Email: <a href="AlgoMolecule@gmail.com" style="color: #1abc9c;">AlgoMolecule@gmail.com</a></p>
+            <p>Email: <a href="mailto:AlgoMolecule@gmail.com" style="color: #1abc9c;">AlgoMolecule@gmail.com</a></p>
+            <p><a href="https://github.com/AlgoMol-dev" class="social-link" target="_blank">
+                    <i class="fab fa-github"></i> Visit us on GitHub
+                </a></p>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2024 AlgoMol LLC. All rights reserved.</p>
+        <div class="footer-social">
+            <a href="https://github.com/AlgoMol-dev" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
     </footer>
 
 </body>
