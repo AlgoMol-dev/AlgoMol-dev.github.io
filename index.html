@@ -271,6 +271,56 @@
             position: absolute;
             animation: snowfall 3s infinite linear;
         }
+
+        .database-card {
+            background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #1abc9c;
+        }
+
+        .database-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
+        }
+
+        .database-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(26, 188, 156, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .database-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .database-link {
+            display: inline-block;
+            font-size: 1.4rem;
+            color: #1abc9c;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border: 2px solid #1abc9c;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .database-link:hover {
+            background: #1abc9c;
+            color: #000;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -281,6 +331,7 @@
         <nav>
             <a href="#about">About Us</a>
             <a href="#services">Services</a>
+            <a href="database.html">Database</a>
             <a href="#contact">Contact</a>
         </nav>
     </header>
@@ -312,6 +363,16 @@
                 <li>Quantum Chemistry Calculations of Molecular Spectra</li>
                 <li>Algorithm Development for Chemical Processes</li>
             </ul>
+        </section>
+
+        <section class="database-card">
+            <h2>Molecular Database</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                Explore our comprehensive collection of molecular structures and computational results.
+            </p>
+            <a href="database.html" class="database-link">
+                Access Database <i class="fas fa-database" style="margin-left: 10px;"></i>
+            </a>
         </section>
 
         <section id="contact">
