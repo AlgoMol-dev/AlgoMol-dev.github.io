@@ -256,12 +256,16 @@
             margin-top: 0.5rem;
             padding-left: 1rem;
             border-left: 2px solid #1abc9c;
-            display: none;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .item-details.show {
-            display: block;
-            animation: slideDown 0.3s ease;
+            height: auto;
+            opacity: 1;
+            padding: 0.5rem 0 0.5rem 1rem;
         }
 
         .toggle-details {
@@ -730,12 +734,16 @@
 
                     // Add click handler for toggle
                     toggleBtn.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Prevent event bubbling
+                        e.stopPropagation();
                         const isShowing = details.classList.contains('show');
-                        details.classList.toggle('show');
-                        toggleBtn.innerHTML = isShowing
-                            ? '<i class="fas fa-chevron-down"></i>'
-                            : '<i class="fas fa-chevron-up"></i>';
+
+                        if (isShowing) {
+                            details.classList.remove('show');
+                            toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                        } else {
+                            details.classList.add('show');
+                            toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                        }
                     });
 
                     // Assemble the elements
