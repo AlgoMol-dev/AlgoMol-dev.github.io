@@ -3,17 +3,12 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>LeanCloud Full-Access CRUD</title>
+    <title>LeanCloud Admin-Approved Signup</title>
     <style>
         body {
             font-family: sans-serif;
             margin: 20px;
-            max-width: 600px;
-        }
-
-        h1,
-        h2 {
-            margin-bottom: 1rem;
+            max-width: 700px;
         }
 
         .hidden {
@@ -34,6 +29,10 @@
             margin: 4px 0;
             padding: 4px 8px;
             cursor: pointer;
+        }
+
+        hr {
+            margin: 12px 0;
         }
 
         ul {
@@ -57,11 +56,21 @@
             border-radius: 4px;
             margin-left: 8px;
         }
+
+        .approve-btn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
     </style>
 </head>
 
 <body>
-    <h1>LeanCloud Full-Access CRUD</h1>
+    <h1>LeanCloud: Admin-Approved Signups</h1>
 
     <!-- AUTH SECTION -->
     <div class="section" id="auth-section">
@@ -84,19 +93,29 @@
     <!-- USER SECTION -->
     <div class="section hidden" id="user-section">
         <h2>Welcome, <span id="current-user"></span>!</h2>
+        <p id="approval-warning" class="hidden" style="color:red;">
+            You are not approved yet. Please wait for an admin to approve your account.
+        </p>
         <button id="btn-logout">Logout</button>
     </div>
 
-    <!-- CRUD SECTION -->
+    <!-- ADMIN SECTION (ONLY VISIBLE TO ADMIN) -->
+    <div class="section hidden" id="admin-section">
+        <h2>Admin Panel</h2>
+        <p>Below are users who have <strong>approved = false</strong>.</p>
+        <button id="btn-load-pending">Load Unapproved Users</button>
+        <ul id="pending-users"></ul>
+    </div>
+
+    <!-- CRUD SECTION (ONLY VISIBLE IF APPROVED) -->
     <div class="section hidden" id="crud-section">
-        <h2>Manage ALL Items</h2>
+        <h2>Manage ALL Items (Approved Users Only)</h2>
         <div>
             <label for="inputItem">New Item:</label>
             <input type="text" id="inputItem" placeholder="e.g. Buy milk" />
             <button id="btnCreate">Create</button>
         </div>
         <hr />
-
         <button id="btnLoad">Load All Items</button>
         <ul id="itemsList"></ul>
     </div>
@@ -104,9 +123,9 @@
     <!-- LeanCloud JavaScript SDK -->
     <script src="https://unpkg.com/leancloud-storage/dist/av-min.js"></script>
     <script>
-        /**************************************
+        /****************************************
          * 1. Initialize LeanCloud
-         **************************************/
+         ****************************************/
         AV.init({
             appId: 'svYLL69Z8lP79syoZiavR82h-MdYXbMMI',
             appKey: 'bJXjFX3OuEnmIvtEKT8x8bcd',
@@ -116,20 +135,26 @@
         // DOM references
         const authSection = document.getElementById('auth-section');
         const userSection = document.getElementById('user-section');
+        const adminSection = document.getElementById('admin-section');
         const crudSection = document.getElementById('crud-section');
 
         const signupUsername = document.getElementById('signup-username');
         const signupPassword = document.getElementById('signup-password');
+        const btnSignup = document.getElementById('btn-signup');
+
         const loginUsername = document.getElementById('login-username');
         const loginPassword = document.getElementById('login-password');
-
-        const btnSignup = document.getElementById('btn-signup');
         const btnLogin = document.getElementById('btn-login');
-        const btnLogout = document.getElementById('btn-logout');
 
         const currentUserEl = document.getElementById('current-user');
+        const approvalWarningEl = document.getElementById('approval-warning');
+        const btnLogout = document.getElementById('btn-logout');
 
-        // CRUD elements
+        // Admin
+        const btnLoadPending = document.getElementById('btn-load-pending');
+        const pendingUsers = document.getElementById('pending-users');
+
+        // CRUD
         const inputItem = document.getElementById('inputItem');
         const btnCreate = document.getElementById('btnCreate');
         const btnLoad = document.getElementById('btnLoad');
@@ -138,9 +163,9 @@
         // LeanCloud class
         const ItemClass = AV.Object.extend('Item');
 
-        /**************************************
-         * 2. Check Login State on Load
-         **************************************/
+        /****************************************
+         * 2. Check Login State on Page Load
+         ****************************************/
         checkLoginState();
 
         function checkLoginState() {
@@ -148,48 +173,76 @@
             if (currentUser) {
                 authSection.classList.add('hidden');
                 userSection.classList.remove('hidden');
-                crudSection.classList.remove('hidden');
                 currentUserEl.textContent = currentUser.getUsername();
+
+                // Check if admin
+                if (isAdmin(currentUser)) {
+                    adminSection.classList.remove('hidden');
+                } else {
+                    adminSection.classList.add('hidden');
+                }
+
+                // Check if "approved" => can do CRUD
+                const approved = currentUser.get('approved');
+                if (approved) {
+                    approvalWarningEl.classList.add('hidden');
+                    crudSection.classList.remove('hidden');
+                } else {
+                    approvalWarningEl.classList.remove('hidden');
+                    crudSection.classList.add('hidden');
+                }
             } else {
+                // Not logged in
                 authSection.classList.remove('hidden');
                 userSection.classList.add('hidden');
+                adminSection.classList.add('hidden');
                 crudSection.classList.add('hidden');
             }
         }
 
-        /**************************************
-         * 3. Sign Up
-         **************************************/
+        // Simple check: if username === 'admin', we treat them as admin
+        // For real security, you'd use LeanCloud Roles or more robust checks
+        function isAdmin(user) {
+            return user.getUsername() === 'admin';
+        }
+
+        /****************************************
+         * 3. Sign Up (approved = false)
+         ****************************************/
         btnSignup.addEventListener('click', async () => {
             const username = signupUsername.value.trim();
             const password = signupPassword.value.trim();
+
             if (!username || !password) {
-                alert('Please fill out both fields.');
+                alert('Please enter a username and password.');
                 return;
             }
 
             const user = new AV.User();
             user.setUsername(username);
             user.setPassword(password);
+            // Mark new user as "not approved"
+            user.set('approved', false);
 
             try {
                 await user.signUp();
-                alert('Sign up successful!');
-                checkLoginState();
+                alert('Sign up successful (pending admin approval)!');
+                checkLoginState();  // user is automatically logged in
             } catch (err) {
                 console.error('Sign up error:', err);
                 alert(`Sign up failed: ${err.message}`);
             }
         });
 
-        /**************************************
+        /****************************************
          * 4. Login
-         **************************************/
+         ****************************************/
         btnLogin.addEventListener('click', async () => {
             const username = loginUsername.value.trim();
             const password = loginPassword.value.trim();
+
             if (!username || !password) {
-                alert('Please fill out both fields.');
+                alert('Please enter a username and password.');
                 return;
             }
 
@@ -203,26 +256,88 @@
             }
         });
 
-        /**************************************
+        /****************************************
          * 5. Logout
-         **************************************/
+         ****************************************/
         btnLogout.addEventListener('click', async () => {
             try {
                 await AV.User.logOut();
-                alert('Logged out!');
+                alert('You have logged out!');
                 checkLoginState();
             } catch (err) {
                 console.error('Logout error:', err);
             }
         });
 
-        /**************************************
-         * 6. CREATE (Public ACL)
-         **************************************/
+        /****************************************
+         * 6. Admin: Load & Approve Pending Users
+         ****************************************/
+        btnLoadPending.addEventListener('click', async () => {
+            const currentUser = AV.User.current();
+            if (!currentUser || !isAdmin(currentUser)) {
+                alert('Only admin can load pending users.');
+                return;
+            }
+
+            // Query _User for users with approved = false
+            // This requires that your LeanCloud security is set so "admin" can read _User.
+            const query = new AV.Query('_User');
+            query.equalTo('approved', false);
+
+            try {
+                const results = await query.find();
+                pendingUsers.innerHTML = '';
+                if (results.length === 0) {
+                    pendingUsers.innerHTML = '<li>No unapproved users found.</li>';
+                    return;
+                }
+
+                results.forEach(u => {
+                    const li = document.createElement('li');
+                    li.textContent = `Username: ${u.getUsername()}`;
+
+                    const approveBtn = document.createElement('button');
+                    approveBtn.textContent = 'Approve';
+                    approveBtn.className = 'approve-btn';
+                    approveBtn.addEventListener('click', () => approveUser(u, li));
+
+                    li.appendChild(approveBtn);
+                    pendingUsers.appendChild(li);
+                });
+            } catch (err) {
+                console.error('Error loading pending users:', err);
+                alert(`Failed to load pending users: ${err.message}`);
+            }
+        });
+
+        async function approveUser(userObj, liElement) {
+            if (!confirm(`Approve user ${userObj.getUsername()}?`)) {
+                return;
+            }
+            userObj.set('approved', true);
+            try {
+                await userObj.save();
+                if (liElement.parentNode) {
+                    liElement.parentNode.removeChild(liElement);
+                }
+                alert(`${userObj.getUsername()} is now approved.`);
+            } catch (err) {
+                console.error('Approve error:', err);
+                alert(`Failed to approve user: ${err.message}`);
+            }
+        }
+
+        /****************************************
+         * 7. CREATE: Everyone with approved=true
+         ****************************************/
         async function createItem() {
             const currentUser = AV.User.current();
             if (!currentUser) {
                 alert('You must be logged in to create items.');
+                return;
+            }
+            if (!currentUser.get('approved')) {
+                alert('Your account is not approved yet.');
                 return;
             }
 
@@ -235,16 +350,16 @@
             const newItem = new ItemClass();
             newItem.set('name', itemName);
 
-            // Make item fully public (read & write).
-            // Everyone can see/edit, but your front-end code ensures only logged-in users can do it from here.
+            // Public read & write, but front-end checks login.
+            // If you only want the entire DB to be open to all approved users,
+            // that’s effectively "any logged-in user with domain security" anyway.
             const acl = new AV.ACL();
             acl.setPublicReadAccess(true);
             acl.setPublicWriteAccess(true);
             newItem.setACL(acl);
 
             try {
-                const saved = await newItem.save();
-                console.log('Item saved:', saved.id);
+                await newItem.save();
                 inputItem.value = '';
                 loadItems();
             } catch (err) {
@@ -253,24 +368,26 @@
             }
         }
 
-        /**************************************
-         * 7. READ (Load ALL Items)
-         **************************************/
+        /****************************************
+         * 8. READ: All Items (Must be approved)
+         ****************************************/
         async function loadItems() {
             const currentUser = AV.User.current();
             if (!currentUser) {
                 alert('You must be logged in to load items.');
                 return;
             }
+            if (!currentUser.get('approved')) {
+                alert('Your account is not approved yet.');
+                return;
+            }
 
             itemsList.innerHTML = '';
             const query = new AV.Query('Item');
-            query.descending('createdAt'); // optional: newest first
+            query.descending('createdAt');
 
             try {
                 const results = await query.find();
-                console.log('Loaded items:', results);
-
                 results.forEach(item => {
                     const li = document.createElement('li');
                     li.textContent = item.get('name');
@@ -284,18 +401,22 @@
                     itemsList.appendChild(li);
                 });
             } catch (err) {
-                console.error('Error loading items:', err);
+                console.error('Load error:', err);
                 alert(`Load failed: ${err.message}`);
             }
         }
 
-        /**************************************
-         * 8. DELETE (Any Item)
-         **************************************/
+        /****************************************
+         * 9. DELETE: Must be approved
+         ****************************************/
         async function deleteItem(objectId, liElement) {
             const currentUser = AV.User.current();
             if (!currentUser) {
                 alert('You must be logged in to delete items.');
+                return;
+            }
+            if (!currentUser.get('approved')) {
+                alert('Your account is not approved yet.');
                 return;
             }
 
@@ -315,7 +436,7 @@
             }
         }
 
-        // Attach event listeners for create/read
+        // Event listeners
         btnCreate.addEventListener('click', createItem);
         btnLoad.addEventListener('click', loadItems);
     </script>
