@@ -726,7 +726,8 @@
                     const details = document.createElement('div');
                     details.className = 'item-details';
                     const weight = item.get('weight_kg');
-                    details.textContent = `Weight: ${weight ? weight + ' kg' : 'Not specified'}`;
+                    // details.textContent = `Weight: ${weight ? weight + ' kg' : 'Not specified'}`;
+                    details.textContent = `Weight: ${weight + ' kg'}`;
 
                     // Add click handler for toggle
                     toggleBtn.addEventListener('click', () => {
