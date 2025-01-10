@@ -168,6 +168,12 @@
          ****************************************/
         checkLoginState();
 
+        async function canUserDoCRUD(user) {
+            if (!user) return false;
+            const roles = await user.getRoles();
+            return roles.some(role => role.getName() === 'Approved');
+        }
+
         function checkLoginState() {
             const currentUser = AV.User.current();
             if (currentUser) {
@@ -183,8 +189,8 @@
                 }
 
                 // Check if "approved" => can do CRUD
-                const approved = currentUser.get('approved');
-                if (approved) {
+                // const approved = currentUser.get('approved');
+                if (canUserDoCRUD(currentUser)) {
                     approvalWarningEl.classList.add('hidden');
                     crudSection.classList.remove('hidden');
                 } else {
@@ -222,7 +228,7 @@
             user.setUsername(username);
             user.setPassword(password);
             // Mark new user as "not approved"
-            user.set('approved', false);
+            // user.set('approved', false);
 
             try {
                 await user.signUp();
@@ -274,61 +280,124 @@
          ****************************************/
         btnLoadPending.addEventListener('click', async () => {
             const currentUser = AV.User.current();
-            if (!currentUser || !isAdmin(currentUser)) {
+            // Make sure only your "admin" user calls this
+            // For real security, you’d do an isAdmin(currentUser) check that fetches roles
+            if (!currentUser || !await isAdmin(currentUser)) {
                 alert('Only admin can load pending users.');
                 return;
             }
 
-            // Query _User for users with approved = false
-            // This requires that your LeanCloud security is set so "admin" can read _User.
-            const query = new AV.Query('_User');
-            query.equalTo('approved', false);
-
             try {
-                const results = await query.find();
+                // --- 1) Fetch ALL users ---
+                const allUsersQuery = new AV.Query('_User');
+                allUsersQuery.limit(1000); // adjust as needed
+                const allUsers = await allUsersQuery.find();
+
+                // --- 2) Fetch the "Approved" role ---
+                const roleQuery = new AV.Query(AV.Role);
+                roleQuery.equalTo('name', 'Approved');
+                const approvedRole = await roleQuery.first();
+                if (!approvedRole) {
+                    alert('Could not find the "Approved" role in LeanCloud. Make sure it exists.');
+                    return;
+                }
+
+                // --- 3) Fetch users in "Approved" role ---
+                const approvedUsersQuery = approvedRole.getUsers().query();
+                approvedUsersQuery.limit(1000);
+                const approvedUsers = await approvedUsersQuery.find();
+
+                // Create a set of approved user IDs
+                const approvedIds = new Set(approvedUsers.map(u => u.id));
+
+                // --- 4) Filter out the users who are in "Approved" ---
+                const notApproved = allUsers.filter(u => !approvedIds.has(u.id));
+
+                // --- 5) Display the Not-Approved Users ---
                 pendingUsers.innerHTML = '';
-                if (results.length === 0) {
+                if (notApproved.length === 0) {
                     pendingUsers.innerHTML = '<li>No unapproved users found.</li>';
                     return;
                 }
 
-                results.forEach(u => {
+                notApproved.forEach(u => {
                     const li = document.createElement('li');
                     li.textContent = `Username: ${u.getUsername()}`;
 
                     const approveBtn = document.createElement('button');
                     approveBtn.textContent = 'Approve';
                     approveBtn.className = 'approve-btn';
+
+                    // Call your role-based "approveUser" method instead of userObj.set('approved', true)
+                    // e.g. approveUser(u, li) => adds the user to the "Approved" role
                     approveBtn.addEventListener('click', () => approveUser(u, li));
 
                     li.appendChild(approveBtn);
                     pendingUsers.appendChild(li);
                 });
+
             } catch (err) {
                 console.error('Error loading pending users:', err);
                 alert(`Failed to load pending users: ${err.message}`);
             }
         });
 
+        // Deprecated method.
+        // async function approveUser(userObj, liElement) {
+        //     if (!confirm(`Approve user ${userObj.getUsername()}?`)) {
+        //         return;
+        //     }
+        //     userObj.set('approved', true);
+        //     try {
+        //         await userObj.save();
+        //         if (liElement.parentNode) {
+        //             liElement.parentNode.removeChild(liElement);
+        //         }
+        //         alert(`${userObj.getUsername()} is now approved.`);
+        //     } catch (err) {
+        //         console.error('Approve error:', err);
+        //         alert(`Failed to approve user: ${err.message}`);
+        //     }
+        // }
+
         async function approveUser(userObj, liElement) {
             if (!confirm(`Approve user ${userObj.getUsername()}?`)) {
                 return;
             }
-            userObj.set('approved', true);
+
             try {
-                await userObj.save();
+                // 1) Query the "Approved" role
+                const roleQuery = new AV.Query(AV.Role);
+                roleQuery.equalTo('name', 'Approved');
+                // If your class permissions for Role require the master key or the Admin role,
+                // you might need: { useMasterKey: true }
+                const approvedRole = await roleQuery.first();
+
+                if (!approvedRole) {
+                    throw new Error('Could not find the "Approved" role. Check LeanCloud console.');
+                }
+
+                // 2) Add the user to the "Approved" role
+                approvedRole.getUsers().add(userObj);
+
+                // 3) Save the role
+                // If your Admin role has "Update" permission on the Role class, this should work
+                // Otherwise, pass: approvedRole.save(null, { useMasterKey: true })
+                await approvedRole.save();
+
+                // 4) Update UI
                 if (liElement.parentNode) {
                     liElement.parentNode.removeChild(liElement);
                 }
-                alert(`${userObj.getUsername()} is now approved.`);
+                alert(`${userObj.getUsername()} is now in the "Approved" role.`);
             } catch (err) {
                 console.error('Approve error:', err);
-                alert(`Failed to approve user: ${err.message}`);
+                alert(`Failed to approve user (add to role): ${err.message}`);
             }
         }
 
         /****************************************
-         * 7. CREATE: Everyone with approved=true
+         * 7. CREATE: Everyone with Approved Role.
          ****************************************/
         async function createItem() {
             const currentUser = AV.User.current();
@@ -336,10 +405,10 @@
                 alert('You must be logged in to create items.');
                 return;
             }
-            if (!currentUser.get('approved')) {
-                alert('Your account is not approved yet.');
-                return;
-            }
+            // if (!currentUser.get('approved')) {
+            //     alert('Your account is not approved yet.');
+            //     return;
+            // }
 
             const itemName = inputItem.value.trim();
             if (!itemName) {
@@ -377,10 +446,10 @@
                 alert('You must be logged in to load items.');
                 return;
             }
-            if (!currentUser.get('approved')) {
-                alert('Your account is not approved yet.');
-                return;
-            }
+            // if (!currentUser.get('approved')) {
+            //     alert('Your account is not approved yet.');
+            //     return;
+            // }
 
             itemsList.innerHTML = '';
             const query = new AV.Query('Item');
@@ -415,10 +484,10 @@
                 alert('You must be logged in to delete items.');
                 return;
             }
-            if (!currentUser.get('approved')) {
-                alert('Your account is not approved yet.');
-                return;
-            }
+            // if (!currentUser.get('approved')) {
+            //     alert('Your account is not approved yet.');
+            //     return;
+            // }
 
             if (!confirm('Are you sure you want to delete this item?')) {
                 return;
