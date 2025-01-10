@@ -321,6 +321,26 @@
             color: #000;
             transform: scale(1.05);
         }
+
+        .login-link {
+            display: inline-block;
+            font-size: 1.4rem;
+            color: #1abc9c;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border: 2px solid #1abc9c;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            background: rgba(26, 188, 156, 0.1);
+        }
+
+        .login-link:hover {
+            background: #1abc9c;
+            color: #000;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(26, 188, 156, 0.3);
+        }
     </style>
 </head>
 
@@ -331,14 +351,14 @@
         <nav>
             <a href="#about">About Us</a>
             <a href="#services">Services</a>
-            <a href="database.html">Database</a>
+            <a href="login.html">Login</a>
             <a href="#contact">Contact</a>
         </nav>
     </header>
 
     <main>
         <section class="christmas-message">
-            <h2>Merry Christmas! 🎄</h2>
+            <h2>Happy New Year! 🎄</h2>
             <!-- Add some snowflakes -->
             <span class="snowflake" style="left: 10%;">❄️</span>
             <span class="snowflake" style="left: 30%; animation-delay: 1s;">❄️</span>
@@ -366,12 +386,12 @@
         </section>
 
         <section class="database-card">
-            <h2>Molecular Database</h2>
+            <h2>Member Access</h2>
             <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
-                Explore our comprehensive collection of molecular structures and computational results.
+                Access our exclusive molecular database and computational tools.
             </p>
-            <a href="database.html" class="database-link">
-                Access Database <i class="fas fa-database" style="margin-left: 10px;"></i>
+            <a href="login.html" class="login-link">
+                Login / Register <i class="fas fa-sign-in-alt" style="margin-left: 10px;"></i>
             </a>
         </section>
 
