@@ -576,24 +576,6 @@
             }
         });
 
-        // Deprecated method.
-        // async function approveUser(userObj, liElement) {
-        //     if (!confirm(`Approve user ${userObj.getUsername()}?`)) {
-        //         return;
-        //     }
-        //     userObj.set('approved', true);
-        //     try {
-        //         await userObj.save();
-        //         if (liElement.parentNode) {
-        //             liElement.parentNode.removeChild(liElement);
-        //         }
-        //         alert(`${userObj.getUsername()} is now approved.`);
-        //     } catch (err) {
-        //         console.error('Approve error:', err);
-        //         alert(`Failed to approve user: ${err.message}`);
-        //     }
-        // }
-
         async function approveUser(userObj, liElement) {
             if (!confirm(`Approve user ${userObj.getUsername()}?`)) {
                 return;
@@ -680,10 +662,6 @@
                 alert('You must be logged in to load items.');
                 return;
             }
-            // if (!currentUser.get('approved')) {
-            //     alert('Your account is not approved yet.');
-            //     return;
-            // }
 
             itemsList.innerHTML = '';
             const query = new AV.Query('Item');
@@ -722,15 +700,15 @@
                     delBtn.className = 'delete-btn';
                     delBtn.addEventListener('click', () => deleteItem(item.id, li));
 
-                    // Details section
+                    // Details section - initially hidden (no 'show' class)
                     const details = document.createElement('div');
                     details.className = 'item-details';
                     const weight = item.get('weight_kg');
-                    // details.textContent = `Weight: ${weight ? weight + ' kg' : 'Not specified'}`;
-                    details.textContent = `Weight: ${weight + ' kg'}`;
+                    details.textContent = `Weight: ${weight ? weight + ' kg' : 'Not specified'}`;
 
                     // Add click handler for toggle
-                    toggleBtn.addEventListener('click', () => {
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent event bubbling
                         details.classList.toggle('show');
                         toggleBtn.innerHTML = details.classList.contains('show')
                             ? '<i class="fas fa-chevron-up"></i>'
