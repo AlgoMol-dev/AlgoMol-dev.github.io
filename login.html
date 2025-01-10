@@ -242,7 +242,6 @@
             flex-direction: column;
             flex-grow: 1;
             align-items: flex-start;
-            /* Align content to the left */
         }
 
         .item-main {
@@ -250,6 +249,8 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
+            padding-left: 0.5rem;
+            /* Add padding to align with border */
         }
 
         .item-details {
@@ -262,16 +263,17 @@
             overflow: hidden;
             transition: all 0.3s ease;
             margin-left: 0.5rem;
-            /* Add small margin instead of padding */
-            text-align: left;
-            /* Ensure text alignment */
+            /* Match padding of item-main */
+            padding: 0 0 0 0.5rem;
+            /* Left padding for text */
+            width: calc(100% - 1rem);
+            /* Account for margin and padding */
         }
 
         .item-details.show {
             height: auto;
             opacity: 1;
-            padding: 0.5rem 0;
-            /* Remove left padding */
+            padding: 0.5rem 0 0.5rem 0.5rem;
         }
 
         .toggle-details {
