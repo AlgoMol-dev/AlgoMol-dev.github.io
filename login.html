@@ -236,6 +236,62 @@
             margin: 2rem auto;
             display: block;
         }
+
+        .item-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .item-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .item-details {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            margin-top: 0.5rem;
+            padding-left: 1rem;
+            border-left: 2px solid #1abc9c;
+            display: none;
+        }
+
+        .item-details.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .toggle-details {
+            background: none;
+            border: none;
+            color: #1abc9c;
+            cursor: pointer;
+            padding: 0.2rem 0.5rem;
+            margin: 0 0.5rem;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-details:hover {
+            color: #16a085;
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -637,16 +693,58 @@
                 const results = await query.find();
                 results.forEach(item => {
                     const li = document.createElement('li');
-                    const span = document.createElement('span');
-                    span.textContent = item.get('name');
-                    li.appendChild(span);
 
+                    // Create container for item content
+                    const itemContent = document.createElement('div');
+                    itemContent.className = 'item-content';
+
+                    // Create main item row
+                    const itemMain = document.createElement('div');
+                    itemMain.className = 'item-main';
+
+                    // Name span
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = item.get('name');
+
+                    // Control buttons container
+                    const controls = document.createElement('div');
+                    controls.style.display = 'flex';
+                    controls.style.alignItems = 'center';
+
+                    // Toggle details button
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'toggle-details';
+                    toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+
+                    // Delete button
                     const delBtn = document.createElement('button');
                     delBtn.textContent = 'Delete';
                     delBtn.className = 'delete-btn';
                     delBtn.addEventListener('click', () => deleteItem(item.id, li));
 
-                    li.appendChild(delBtn);
+                    // Details section
+                    const details = document.createElement('div');
+                    details.className = 'item-details';
+                    const weight = item.get('weight_kg');
+                    details.textContent = `Weight: ${weight ? weight + ' kg' : 'Not specified'}`;
+
+                    // Add click handler for toggle
+                    toggleBtn.addEventListener('click', () => {
+                        details.classList.toggle('show');
+                        toggleBtn.innerHTML = details.classList.contains('show')
+                            ? '<i class="fas fa-chevron-up"></i>'
+                            : '<i class="fas fa-chevron-down"></i>';
+                    });
+
+                    // Assemble the elements
+                    controls.appendChild(toggleBtn);
+                    controls.appendChild(delBtn);
+                    itemMain.appendChild(nameSpan);
+                    itemMain.appendChild(controls);
+                    itemContent.appendChild(itemMain);
+                    itemContent.appendChild(details);
+                    li.appendChild(itemContent);
+
                     itemsList.appendChild(li);
                 });
             } catch (err) {
