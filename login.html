@@ -722,19 +722,20 @@
                     delBtn.className = 'delete-btn';
                     delBtn.addEventListener('click', () => deleteItem(item.id, li));
 
-                    // Details section
+                    // Details section - initially hidden
                     const details = document.createElement('div');
                     details.className = 'item-details';
                     const weight = item.get('weight_kg');
-                    // details.textContent = `Weight: ${weight ? weight + ' kg' : 'Not specified'}`;
                     details.textContent = `Weight: ${weight + ' kg'}`;
 
                     // Add click handler for toggle
-                    toggleBtn.addEventListener('click', () => {
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Prevent event bubbling
+                        const isShowing = details.classList.contains('show');
                         details.classList.toggle('show');
-                        toggleBtn.innerHTML = details.classList.contains('show')
-                            ? '<i class="fas fa-chevron-up"></i>'
-                            : '<i class="fas fa-chevron-down"></i>';
+                        toggleBtn.innerHTML = isShowing
+                            ? '<i class="fas fa-chevron-down"></i>'
+                            : '<i class="fas fa-chevron-up"></i>';
                     });
 
                     // Assemble the elements
