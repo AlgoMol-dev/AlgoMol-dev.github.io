@@ -163,16 +163,14 @@
 
         #itemsList li {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-start;
             padding: 0.8rem 1.5rem;
             margin: 0.8rem auto;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
             transition: all 0.3s ease;
             width: 90%;
-            text-align: left;
-            /* Ensure list item aligns left */
         }
 
         #itemsList li:hover {
@@ -184,9 +182,7 @@
             flex-grow: 1;
             margin-right: 1rem;
             text-align: left;
-            /* Force text alignment to left */
             padding-left: 0.5rem;
-            /* Add a little padding from the left edge */
         }
 
         .delete-btn {
@@ -242,6 +238,7 @@
             flex-direction: column;
             flex-grow: 1;
             align-items: flex-start;
+            width: 100%;
         }
 
         .item-main {
@@ -250,7 +247,6 @@
             justify-content: space-between;
             width: 100%;
             padding-left: 0.5rem;
-            /* Add padding to align with border */
         }
 
         .item-details {
@@ -263,11 +259,9 @@
             overflow: hidden;
             transition: all 0.3s ease;
             margin-left: 0.5rem;
-            /* Match padding of item-main */
-            padding: 0 0 0 0.5rem;
-            /* Left padding for text */
+            padding: 0;
+            text-align: left;
             width: calc(100% - 1rem);
-            /* Account for margin and padding */
         }
 
         .item-details.show {
