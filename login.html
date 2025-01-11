@@ -299,6 +299,35 @@
                 transform: translateY(0);
             }
         }
+
+        #pending-users li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .approve-btn {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+            text-transform: none;
+        }
+
+        .approve-btn:hover {
+            background: #27ae60;
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+        }
     </style>
 </head>
 
@@ -563,16 +592,15 @@
 
                 notApproved.forEach(u => {
                     const li = document.createElement('li');
-                    li.textContent = `Username: ${u.getUsername()}`;
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = `Username: ${u.getUsername()}`;
 
                     const approveBtn = document.createElement('button');
                     approveBtn.textContent = 'Approve';
                     approveBtn.className = 'approve-btn';
-
-                    // Call your role-based "approveUser" method instead of userObj.set('approved', true)
-                    // e.g. approveUser(u, li) => adds the user to the "Approved" role
                     approveBtn.addEventListener('click', () => approveUser(u, li));
 
+                    li.appendChild(nameSpan);
                     li.appendChild(approveBtn);
                     pendingUsers.appendChild(li);
                 });
