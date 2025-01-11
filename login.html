@@ -593,7 +593,7 @@
                 notApproved.forEach(u => {
                     const li = document.createElement('li');
                     const nameSpan = document.createElement('span');
-                    nameSpan.textContent = `Username: ${u.getUsername()}`;
+                    nameSpan.textContent = u.getUsername(); // Removed "Username:" prefix
 
                     const approveBtn = document.createElement('button');
                     approveBtn.textContent = 'Approve';
