@@ -328,6 +328,32 @@
             transform: translateY(0);
             box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
         }
+
+        #admin-section {
+            text-align: center;
+            /* Center all content in admin section */
+        }
+
+        #pending-users {
+            max-width: 600px;
+            margin: 2rem auto;
+            /* Center the list */
+            padding: 0;
+        }
+
+        #pending-users li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            margin: 0.8rem auto;
+            /* Center each list item */
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-align: left;
+            width: 90%;
+            /* Control width of list items */
+        }
     </style>
 </head>
 
@@ -367,7 +393,6 @@
 
         <div class="section hidden" id="admin-section">
             <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
-            <p>Manage user approvals below:</p>
             <button id="btn-load-pending"><i class="fas fa-sync"></i> Load Unapproved Users</button>
             <ul id="pending-users"></ul>
         </div>
