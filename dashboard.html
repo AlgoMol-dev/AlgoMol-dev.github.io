@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AlgoMol - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #0a0f24;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            width: 200px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 127, 0.5));
+            transition: all 0.3s ease-in-out;
+        }
+
+        #user-info {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 10px;
+            background: rgba(26, 188, 156, 0.05);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+        }
+
+        /* Copy all the existing item list, button, and CRUD operation styles from login.html */
+        /* ...existing styles for #itemsList, .item-content, .item-main, .item-details, etc... */
+
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            background-color: #1abc9c;
+            color: black;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <img src="/image/icon/algomol_transparent.png" alt="AlgoMol Logo" class="logo">
+        <div id="user-info">
+            Welcome, <span id="current-user"></span>!
+            <button id="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section hidden" id="admin-section">
+            <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
+            <button id="btn-load-pending"><i class="fas fa-sync"></i> Load Unapproved Users</button>
+            <ul id="pending-users"></ul>
+        </div>
+
+        <div class="section" id="crud-section">
+            <h2><i class="fas fa-database"></i> Database Access</h2>
+            <div>
+                <input type="text" id="inputItem" placeholder="Add new item">
+                <button id="btnCreate"><i class="fas fa-plus"></i> Create</button>
+            </div>
+            <button id="btnLoad"><i class="fas fa-list"></i> Load All Items</button>
+            <ul id="itemsList"></ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 AlgoMol LLC. All rights reserved.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leancloud-storage/dist/av-min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>
