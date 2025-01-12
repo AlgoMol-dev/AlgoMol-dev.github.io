@@ -8,11 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Paste the SAME inline CSS here to match the look exactly -->
+    <!-- Paste the SAME inline CSS here -->
     <style>
-        /* --------------------------------
-           (Same CSS from your original code)
-        ----------------------------------- */
+        /* -----------------------------
+           EXACT same CSS from original
+        ------------------------------ */
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
@@ -160,7 +160,7 @@
             margin-top: auto;
         }
 
-        /* Items List / CRUD */
+        /* Items List / CRUD Section */
         #itemsList {
             width: 100%;
             max-width: 600px;
@@ -350,7 +350,7 @@
             <ul id="pending-users"></ul>
         </div>
 
-        <!-- CRUD Section -->
+        <!-- EXACT same "Database Access" section from your original code -->
         <div class="section hidden" id="crud-section">
             <h2><i class="fas fa-database"></i> Database Access</h2>
             <div>
@@ -390,9 +390,11 @@
         const approvalWarningEl = document.getElementById('approval-warning');
         const btnLogout = document.getElementById('btn-logout');
 
+        // Admin
         const btnLoadPending = document.getElementById('btn-load-pending');
         const pendingUsers = document.getElementById('pending-users');
 
+        // CRUD
         const inputItem = document.getElementById('inputItem');
         const btnCreate = document.getElementById('btnCreate');
         const btnLoad = document.getElementById('btnLoad');
@@ -402,28 +404,29 @@
         const ItemClass = AV.Object.extend('Item');
 
         /****************************************
-         * 2. On Page Load: Check if Logged In
+         * 2. Check if user is logged in
          ****************************************/
         checkLoginState();
 
         async function checkLoginState() {
             const currentUser = AV.User.current();
             if (!currentUser) {
-                // If not logged in, go back to login
+                // Not logged in? Return to login page
                 window.location.href = 'login.html';
                 return;
             }
 
-            // Show user info
             userSection.classList.remove('hidden');
             currentUserEl.textContent = currentUser.getUsername();
 
-            // Check if admin
+            // Admin check
             if (await isAdmin(currentUser)) {
                 adminSection.classList.remove('hidden');
+            } else {
+                adminSection.classList.add('hidden');
             }
 
-            // Check if user is "Approved"
+            // Approved check => show/hide CRUD
             if (await canUserDoCRUD(currentUser)) {
                 approvalWarningEl.classList.add('hidden');
                 crudSection.classList.remove('hidden');
@@ -433,13 +436,12 @@
             }
         }
 
-        // For demonstration, we check username or role membership
+        // Example role checks
         async function isAdmin(user) {
             if (!user) return false;
             const roles = await user.getRoles();
             return roles.some(role => role.getName() === 'Admin');
         }
-
         async function canUserDoCRUD(user) {
             if (!user) return false;
             const roles = await user.getRoles();
@@ -452,7 +454,7 @@
         btnLogout.addEventListener('click', async () => {
             try {
                 await AV.User.logOut();
-                alert('You have logged out!');
+                alert('Logged out!');
                 window.location.href = 'login.html';
             } catch (err) {
                 console.error('Logout error:', err);
@@ -468,32 +470,31 @@
                 alert('Only admin can load pending users.');
                 return;
             }
-
             try {
-                // 1) fetch all users
+                // 1) Fetch all users
                 const allUsersQuery = new AV.Query('_User');
                 allUsersQuery.limit(1000);
                 const allUsers = await allUsersQuery.find();
 
-                // 2) fetch "Approved" role
+                // 2) Fetch Approved role
                 const roleQuery = new AV.Query(AV.Role);
                 roleQuery.equalTo('name', 'Approved');
                 const approvedRole = await roleQuery.first();
                 if (!approvedRole) {
-                    alert('Could not find "Approved" role. Check LeanCloud console.');
+                    alert('Could not find the "Approved" role.');
                     return;
                 }
 
-                // 3) fetch members of "Approved" role
+                // 3) Who is already in Approved
                 const approvedUsersQuery = approvedRole.getUsers().query();
                 approvedUsersQuery.limit(1000);
                 const approvedUsers = await approvedUsersQuery.find();
                 const approvedIds = new Set(approvedUsers.map(u => u.id));
 
-                // 4) filter out those who are already approved
+                // 4) Subtract
                 const notApproved = allUsers.filter(u => !approvedIds.has(u.id));
 
-                // 5) display
+                // 5) Display
                 pendingUsers.innerHTML = '';
                 if (notApproved.length === 0) {
                     pendingUsers.innerHTML = '<li>No unapproved users found.</li>';
@@ -504,14 +505,13 @@
                     li.textContent = u.getUsername();
 
                     const approveBtn = document.createElement('button');
-                    approveBtn.textContent = 'Approve';
                     approveBtn.className = 'approve-btn';
+                    approveBtn.textContent = 'Approve';
                     approveBtn.addEventListener('click', () => approveUser(u, li));
 
                     li.appendChild(approveBtn);
                     pendingUsers.appendChild(li);
                 });
-
             } catch (err) {
                 console.error('Error loading pending users:', err);
                 alert(`Failed to load pending users: ${err.message}`);
@@ -523,7 +523,6 @@
                 return;
             }
             try {
-                // find "Approved" role
                 const roleQuery = new AV.Query(AV.Role);
                 roleQuery.equalTo('name', 'Approved');
                 const approvedRole = await roleQuery.first();
@@ -544,7 +543,7 @@
         }
 
         /****************************************
-         * 5. CRUD
+         * 5. CREATE/READ/DELETE with Toggle
          ****************************************/
         btnCreate.addEventListener('click', createItem);
         btnLoad.addEventListener('click', loadItems);
@@ -552,7 +551,7 @@
         async function createItem() {
             const currentUser = AV.User.current();
             if (!currentUser || !(await canUserDoCRUD(currentUser))) {
-                alert('You are not approved to create items.');
+                alert('Not approved to create items.');
                 return;
             }
 
@@ -565,7 +564,7 @@
             const newItem = new ItemClass();
             newItem.set('name', itemName);
 
-            // Simple ACL for demonstration
+            // Public read/write
             const acl = new AV.ACL();
             acl.setPublicReadAccess(true);
             acl.setPublicWriteAccess(true);
@@ -584,7 +583,7 @@
         async function loadItems() {
             const currentUser = AV.User.current();
             if (!currentUser || !(await canUserDoCRUD(currentUser))) {
-                alert('You are not approved to load items.');
+                alert('Not approved to load items.');
                 return;
             }
 
@@ -594,15 +593,66 @@
 
             try {
                 const results = await query.find();
+
                 results.forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = item.get('name');
 
+                    // Container for item content
+                    const itemContent = document.createElement('div');
+                    itemContent.className = 'item-content';
+
+                    // Main row
+                    const itemMain = document.createElement('div');
+                    itemMain.className = 'item-main';
+
+                    // Name
+                    const nameSpan = document.createElement('span');
+                    nameSpan.textContent = item.get('name');
+
+                    // Control buttons
+                    const controls = document.createElement('div');
+                    controls.style.display = 'flex';
+                    controls.style.alignItems = 'center';
+
+                    // Toggle details button
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'toggle-details';
+                    toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+
+                    // Delete button
                     const delBtn = document.createElement('button');
                     delBtn.textContent = 'Delete';
                     delBtn.className = 'delete-btn';
                     delBtn.addEventListener('click', () => deleteItem(item.id, li));
-                    li.appendChild(delBtn);
+
+                    // Details section
+                    const details = document.createElement('div');
+                    details.className = 'item-details';
+                    // Example: weight_kg field from your original code
+                    const weight = item.get('weight_kg');
+                    details.innerHTML = `<span style="margin-left: 0.5rem">Weight: ${weight + ' kg'}</span>`;
+
+                    // Toggle logic
+                    toggleBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const isShowing = details.classList.contains('show');
+                        if (isShowing) {
+                            details.classList.remove('show');
+                            toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                        } else {
+                            details.classList.add('show');
+                            toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                        }
+                    });
+
+                    // Assemble
+                    controls.appendChild(toggleBtn);
+                    controls.appendChild(delBtn);
+                    itemMain.appendChild(nameSpan);
+                    itemMain.appendChild(controls);
+                    itemContent.appendChild(itemMain);
+                    itemContent.appendChild(details);
+                    li.appendChild(itemContent);
 
                     itemsList.appendChild(li);
                 });
