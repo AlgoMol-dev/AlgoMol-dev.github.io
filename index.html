@@ -509,6 +509,242 @@
             font-size: 1rem;
             line-height: 1.5;
         }
+
+        .about-section {
+            background: linear-gradient(145deg, #0a0f24, #1c1c1c);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 70% 30%, rgba(26, 188, 156, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-header h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-subtitle {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .about-content {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 3rem;
+        }
+
+        .about-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .about-main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mission-card {
+            background: rgba(26, 188, 156, 0.1);
+            border-radius: 15px;
+            padding: 2.5rem;
+            border: 1px solid rgba(26, 188, 156, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .mission-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
+        }
+
+        .mission-icon {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-icon i {
+            font-size: 3rem;
+            color: #1abc9c;
+        }
+
+        .mission-card h3 {
+            color: #1abc9c;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .mission-card p {
+            color: #e0e0e0;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .vision-values {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .vision-card,
+        .values-card {
+            background: rgba(26, 188, 156, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .vision-card:hover,
+        .values-card:hover {
+            transform: translateY(-3px);
+            border-color: #1abc9c;
+        }
+
+        .vision-icon,
+        .values-icon {
+            margin-bottom: 1rem;
+        }
+
+        .vision-icon i,
+        .values-icon i {
+            font-size: 2rem;
+            color: #1abc9c;
+        }
+
+        .vision-card h4,
+        .values-card h4 {
+            color: #1abc9c;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .vision-card p {
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .values-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .values-list li {
+            color: #e0e0e0;
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .values-list li::before {
+            content: "✓";
+            color: #1abc9c;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(26, 188, 156, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(26, 188, 156, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(26, 188, 156, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #1abc9c;
+            min-width: 60px;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            display: block;
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-desc {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .about-cta {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .primary-button {
+            background: #1abc9c;
+            color: #000;
+            margin-right: 1rem;
+        }
+
+        .primary-button:hover {
+            background: #16a085;
+            color: #fff;
+        }
+
+        .secondary-button {
+            background: transparent;
+            color: #1abc9c;
+            border: 2px solid #1abc9c;
+        }
+
+        .secondary-button:hover {
+            background: #1abc9c;
+            color: #000;
+        }
+
+        /* Add any additional custom styles below */
     </style>
 </head>
 
@@ -551,14 +787,80 @@
             </div>
         </section>
 
-        <section id="about">
-            <h2>About Us</h2>
-            <p>Based in Chicago, we blend the power of advanced computational algorithms and molecular sciences to
-                unlock new possibilities in chemical engineering and molecular research.</p>
+        <section id="about" class="about-section">
+            <div class="about-header">
+                <h2>About AlgoMol</h2>
+                <p class="about-subtitle">Pioneering the future of computational chemistry through innovative algorithms
+                    and quantum mechanics</p>
+            </div>
 
-            <p>Our focus is on leveraging quantum mechanics, chemical modeling, and computational chemistry to
-                solve complex challenges and drive innovation forward.</p>
-            <a href="#contact" class="button">Get in Touch</a>
+            <div class="about-content">
+                <div class="about-main">
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Our Mission</h3>
+                        <p>Based in Chicago, we're revolutionizing molecular discovery by combining cutting-edge
+                            computational algorithms with advanced molecular sciences. Our mission is to accelerate
+                            scientific breakthroughs in chemistry, materials science, and drug discovery through
+                            intelligent automation and predictive modeling.</p>
+                    </div>
+
+                    <div class="vision-values">
+                        <div class="vision-card">
+                            <div class="vision-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h4>Vision</h4>
+                            <p>To become the leading platform for computational chemistry solutions, empowering
+                                researchers worldwide to solve complex molecular challenges.</p>
+                        </div>
+
+                        <div class="values-card">
+                            <div class="values-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h4>Values</h4>
+                            <ul class="values-list">
+                                <li>Scientific Excellence</li>
+                                <li>Innovation & Collaboration</li>
+                                <li>Open Research</li>
+                                <li>Precision & Accuracy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon"><i class="fas fa-graduation-cap"></i></span>
+                        <div class="stat-info">
+                            <span class="stat-value">PhD-Led Team</span>
+                            <span class="stat-desc">Computational Chemistry Experts</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon"><i class="fas fa-award"></i></span>
+                        <div class="stat-info">
+                            <span class="stat-value">10+ Years</span>
+                            <span class="stat-desc">Combined Research Experience</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon"><i class="fas fa-globe"></i></span>
+                        <div class="stat-info">
+                            <span class="stat-value">Global Impact</span>
+                            <span class="stat-desc">Collaborations Worldwide</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-cta">
+                <a href="#contact" class="button primary-button">Partner With Us</a>
+                <a href="#services" class="button secondary-button">Explore Our Solutions</a>
+            </div>
         </section>
 
         <section class="technology-section">
