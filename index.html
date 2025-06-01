@@ -207,69 +207,183 @@
             color: #16a085;
         }
 
-        .christmas-message {
-            background: linear-gradient(135deg, #1a472a, #2d5a4c);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 3rem;
+        .hero-section {
             text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #0a0f24, #1c1c1c);
+            border-radius: 20px;
+            margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
-        .christmas-message h2 {
-            color: #ff0000;
-            font-size: 2.8rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            margin-bottom: 1.5rem;
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(26, 188, 156, 0.1) 0%, transparent 50%);
+            pointer-events: none;
         }
 
-        .christmas-message p {
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 3rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
             color: #ffffff;
-            font-size: 1.6rem;
-            line-height: 1.8;
-            font-weight: 300;
             margin-bottom: 1.5rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
         }
 
-        .christmas-message::before {
-            content: "🎄";
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            display: inline-block;
+        }
+
+        .cta-button.primary {
+            background: #1abc9c;
+            color: #000;
+            border-color: #1abc9c;
+        }
+
+        .cta-button.primary:hover {
+            background: #16a085;
+            border-color: #16a085;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #1abc9c;
+            border-color: #1abc9c;
+        }
+
+        .cta-button.secondary:hover {
+            background: #1abc9c;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.3);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(26, 188, 156, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(26, 188, 156, 0.3);
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1abc9c;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #b0b0b0;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(26, 188, 156, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
             position: absolute;
-            left: 20px;
-            top: 20px;
-            font-size: 2rem;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(26, 188, 156, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
         }
 
-        .christmas-message::after {
-            content: "🎁";
-            position: absolute;
-            right: 20px;
-            bottom: 20px;
-            font-size: 2rem;
+        .feature-card:hover::before {
+            transform: translateX(100%);
         }
 
-        @keyframes snowfall {
-            0% {
-                transform: translateY(-10px) rotate(0deg);
-                opacity: 0;
-            }
-
-            50% {
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(10px) rotate(360deg);
-                opacity: 0;
-            }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
+            border-color: #1abc9c;
         }
 
-        .snowflake {
-            color: white;
-            position: absolute;
-            animation: snowfall 3s infinite linear;
+        .feature-icon {
+            font-size: 3rem;
+            color: #1abc9c;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            color: #1abc9c;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
         }
 
         .database-card {
@@ -341,6 +455,60 @@
             transform: scale(1.05);
             box-shadow: 0 0 15px rgba(26, 188, 156, 0.3);
         }
+
+        .technology-section {
+            background: linear-gradient(145deg, #0a0f24, #1c1c1c);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .technology-section h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.8rem;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tech-item {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(26, 188, 156, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-5px);
+            border-color: #1abc9c;
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.1);
+        }
+
+        .tech-item i {
+            font-size: 3rem;
+            color: #1abc9c;
+            margin-bottom: 1rem;
+        }
+
+        .tech-item h4 {
+            color: #ffffff;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-item p {
+            color: #b0b0b0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 
@@ -357,14 +525,30 @@
     </header>
 
     <main>
-        <section class="christmas-message">
-            <h2>Happy New Year! 🎄</h2>
-            <!-- Add some snowflakes -->
-            <span class="snowflake" style="left: 10%;">❄️</span>
-            <span class="snowflake" style="left: 30%; animation-delay: 1s;">❄️</span>
-            <span class="snowflake" style="left: 50%; animation-delay: 2s;">❄️</span>
-            <span class="snowflake" style="left: 70%; animation-delay: 1.5s;">❄️</span>
-            <span class="snowflake" style="left: 90%; animation-delay: 0.5s;">❄️</span>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Revolutionizing Molecular Discovery</h1>
+                <p class="hero-subtitle">Advanced computational chemistry solutions powered by cutting-edge algorithms
+                    and quantum mechanics</p>
+                <div class="hero-buttons">
+                    <a href="#services" class="cta-button primary">Explore Solutions</a>
+                    <a href="#contact" class="cta-button secondary">Get Started</a>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">10k+</span>
+                    <span class="stat-label">Molecules Analyzed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">Accuracy Rate</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Research Partners</span>
+                </div>
+            </div>
         </section>
 
         <section id="about">
@@ -377,22 +561,100 @@
             <a href="#contact" class="button">Get in Touch</a>
         </section>
 
+        <section class="technology-section">
+            <h2>Our Technology Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <i class="fas fa-brain"></i>
+                    <h4>Machine Learning</h4>
+                    <p>TensorFlow, PyTorch, Scikit-learn</p>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-calculator"></i>
+                    <h4>Quantum Computing</h4>
+                    <p>Qiskit, VASP, Gaussian</p>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-python"></i>
+                    <h4>Development</h4>
+                    <p>Python, C++, CUDA, OpenMP</p>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-cloud"></i>
+                    <h4>Cloud Platform</h4>
+                    <p>AWS, Docker, Kubernetes</p>
+                </div>
+            </div>
+        </section>
+
         <section id="services">
-            <h2>Our Services</h2>
-            <ul>
-                <li>Quantum Chemistry Calculations of Molecular Spectra</li>
-                <li>Algorithm Development for Chemical Processes</li>
-            </ul>
+            <h2>Our Solutions</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h3>Quantum Chemistry Calculations</h3>
+                    <p>Advanced molecular spectra calculations using cutting-edge quantum mechanics algorithms for
+                        precise molecular analysis and prediction.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Algorithm Development</h3>
+                    <p>Custom computational algorithms tailored for chemical processes, optimizing reaction pathways and
+                        molecular interactions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Molecular Database</h3>
+                    <p>Comprehensive database of molecular structures and properties, accessible through our advanced
+                        API and computational tools.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Predictive Analytics</h3>
+                    <p>Machine learning models for predicting molecular behavior, drug discovery, and material
+                        properties with unprecedented accuracy.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3>Virtual Lab</h3>
+                    <p>Cloud-based simulation environment for conducting virtual experiments and testing molecular
+                        hypotheses at scale.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Collaboration Platform</h3>
+                    <p>Secure research collaboration tools enabling teams to share data, insights, and computational
+                        resources globally.</p>
+                </div>
+            </div>
         </section>
 
         <section class="database-card">
-            <h2>Member Access</h2>
+            <h2>Join Our Community</h2>
             <p style="font-size: 1.2rem; margin-bottom: 1.5rem;">
-                Access our exclusive molecular database and computational tools.
+                Access our exclusive molecular database, computational tools, and collaborate with leading researchers
+                in computational chemistry.
             </p>
-            <a href="login.html" class="login-link">
-                Login / Register <i class="fas fa-sign-in-alt" style="margin-left: 10px;"></i>
-            </a>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="login.html" class="login-link">
+                    Login / Register <i class="fas fa-sign-in-alt" style="margin-left: 10px;"></i>
+                </a>
+                <a href="https://github.com/AlgoMol-dev" class="login-link" target="_blank">
+                    View on GitHub <i class="fab fa-github" style="margin-left: 10px;"></i>
+                </a>
+            </div>
         </section>
 
         <section id="contact">
