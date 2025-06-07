@@ -488,10 +488,16 @@
 
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
             max-width: 1000px;
             margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .tech-item {
