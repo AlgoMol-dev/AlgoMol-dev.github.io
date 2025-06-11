@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlgoMol Core Library – Python/C++ Molecular Graph Library</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        /* ——— Base styles ——— */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #e0e0e0;
+            scroll-behavior: smooth;
+            font-size: 16px;
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        header {
+            background-color: #0a0f24;
+            color: white;
+            text-align: center;
+            padding: 0;
+            position: relative;
+        }
+
+        /* Sticky header layout */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #0a0f24;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.15rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .site-logo {
+            width: 160px;
+            max-width: 40vw;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 127, 0.4));
+            transition: filter .3s, transform .3s;
+        }
+
+        .site-logo:hover {
+            filter: drop-shadow(0 0 20px rgba(0, 255, 127, 0.7));
+            transform: scale(1.04);
+        }
+
+        .site-nav {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+        }
+
+        .site-nav a {
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .08rem;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 1rem;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08rem;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            border-bottom: 2px solid white;
+            transition: 0.3s ease-in-out;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #1c1c1c;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* offset main content so it doesn't slide under the sticky header */
+        main {
+            margin-top: 85px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ——— Hero ——— */
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #0a0f24, #1c1c1c);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(26, 188, 156, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-inline: auto;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: 2px solid;
+            display: inline-block;
+        }
+
+        .cta-button.primary {
+            background: #1abc9c;
+            color: #000;
+            border-color: #1abc9c;
+        }
+
+        .cta-button.primary:hover {
+            background: #16a085;
+            border-color: #16a085;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #1abc9c;
+            border-color: #1abc9c;
+        }
+
+        .cta-button.secondary:hover {
+            background: #1abc9c;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.3);
+        }
+
+        /* ——— Sections: general ——— */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            font-size: 2.5rem;
+            color: #1abc9c;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+
+        section h3 {
+            font-size: 1.8rem;
+            color: #1abc9c;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        section h4 {
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* ——— ReactWise-style additions ——— */
+        .cta-nav {
+            background: #1abc9c;
+            color: #000 !important;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .cta-nav:hover {
+            background: #16a085;
+            color: #fff !important;
+        }
+
+        /* Features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: #0a0f24;
+            border: 1px solid rgba(26, 188, 156, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
+            border-color: #1abc9c;
+        }
+
+        .feature-card h4 {
+            color: #1abc9c;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #c8c8c8;
+            line-height: 1.6;
+        }
+
+        /* Code blocks */
+        .code-section {
+            background: #0a0f24;
+            border: 1px solid rgba(26, 188, 156, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .code-section h4 {
+            margin-top: 0;
+            color: #1abc9c;
+        }
+
+        pre {
+            background: #000;
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(26, 188, 156, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            color: #1abc9c;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: #e0e0e0;
+        }
+
+        /* Installation steps */
+        .install-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .install-card {
+            background: #0a0f24;
+            border: 1px solid rgba(26, 188, 156, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .install-card h4 {
+            color: #1abc9c;
+            margin-top: 0;
+        }
+
+        /* Requirements list */
+        .requirements-list {
+            background: rgba(26, 188, 156, 0.05);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .requirements-list ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .requirements-list li {
+            margin: 0.5rem 0;
+            color: #c8c8c8;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0a0f24;
+            color: #c8c8c8;
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-social {
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            color: #1abc9c;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-social a:hover {
+            color: #16a085;
+        }
+
+        /* Links */
+        a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* API Reference */
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .api-card {
+            background: rgba(26, 188, 156, 0.05);
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .api-card h5 {
+            color: #1abc9c;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .api-card p {
+            margin: 0;
+            color: #c8c8c8;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ——— Header & Sticky Nav ——— -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="logo-link">
+                <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo">
+            </a>
+            <nav class="site-nav">
+                <a href="/#services">Solutions</a>
+                <a href="/algomol-core.html">Library</a>
+                <a href="/#team">Team</a>
+                <a href="/#news">News</a>
+                <a href="/#careers">Careers</a>
+                <a href="/#contact">Contact</a>
+                <a href="/#book-demo" class="cta-nav">Book&nbsp;a&nbsp;Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ——— Main ——— -->
+    <main>
+
+        <!-- ——— Hero ——— -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>AlgoMol Core Library</h1>
+                <p class="hero-subtitle">C++ library for fast molecular graph representation and equivalence detection
+                    with Python bindings</p>
+                <div class="hero-buttons">
+                    <a href="#installation" class="cta-button primary">Get Started</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ——— Overview ——— -->
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>AlgoMol Core provides a robust framework for molecular modeling with specific focus on:</p>
+            <ul>
+                <li>Molecular graph representation</li>
+                <li>Atom and bond management</li>
+                <li>Chemical and topological equivalence detection</li>
+                <li>VSEPR geometry modeling of molecular structures</li>
+            </ul>
+        </section>
+
+        <!-- ——— Features ——— -->
+        <section id="features">
+            <h2>Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>Molecular Graph Representation</h4>
+                    <p>Model molecules as graphs with atoms as nodes and bonds as edges</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Equivalence Classes</h4>
+                    <p>Generate equivalence classes based on topological or geometrical properties</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Stereochemistry Support</h4>
+                    <p>Handle cis/trans isomerism and other stereochemical features</p>
+                </div>
+                <div class="feature-card">
+                    <h4>VSEPR Geometry</h4>
+                    <p>Automatically assign and manage molecular geometries</p>
+                </div>
+                <div class="feature-card">
+                    <h4>Python Bindings</h4>
+                    <p>Use the library directly from Python with full API support</p>
+                </div>
+                <div class="feature-card">
+                    <h4>High Performance</h4>
+                    <p>Fast C++ core optimized for computational chemistry applications</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ——— Installation ——— -->
+        <section id="installation">
+            <h2>Installation</h2>
+
+            <h3>Requirements</h3>
+            <div class="requirements-list">
+                <ul>
+                    <li>C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2019+)</li>
+                    <li>CMake 3.15 or newer</li>
+                    <li>Python 3.9+ (for Python bindings)</li>
+                    <li>pybind11 (for Python bindings)</li>
+                </ul>
+            </div>
+
+            <div class="install-grid">
+                <div class="install-card">
+                    <h4>Python Package (Recommended)</h4>
+                    <p>The easiest way to get started:</p>
+                    <pre><code class="language-bash">pip install algomol</code></pre>
+                </div>
+
+                <div class="install-card">
+                    <h4>Build from Source</h4>
+                    <p>For development or custom builds:</p>
+                    <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/lanl2vz/algomol-core.git
+cd algomol-core
+
+# Create a build directory
+mkdir build && cd build
+
+# Configure with CMake
+cmake ..
+
+# Build
+cmake --build . --config Release
+
+# Install (optional)
+cmake --install .</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- ——— Usage ——— -->
+        <section id="usage">
+            <h2>Usage Examples</h2>
+
+            <div class="code-section">
+                <h4>Python API</h4>
+                <pre><code class="language-python">import algomol
+
+# Create a molecule
+molecule = algomol.MolGraph("ethane")
+
+# Add atoms
+molecule.add_atom(1, 6)  # Carbon (atomic number 6)
+molecule.add_atom(2, 6)  # Carbon
+molecule.add_atom(3, 1)  # Hydrogen (atomic number 1)
+molecule.add_atom(4, 1)  # Hydrogen
+molecule.add_atom(5, 1)  # Hydrogen
+molecule.add_atom(6, 1)  # Hydrogen
+molecule.add_atom(7, 1)  # Hydrogen
+molecule.add_atom(8, 1)  # Hydrogen
+
+# Add bonds
+molecule.add_bond(1, 2, algomol.BondType.SINGLE)
+molecule.add_bond(1, 3, algomol.BondType.SINGLE)
+molecule.add_bond(1, 4, algomol.BondType.SINGLE)
+molecule.add_bond(1, 5, algomol.BondType.SINGLE)
+molecule.add_bond(2, 6, algomol.BondType.SINGLE)
+molecule.add_bond(2, 7, algomol.BondType.SINGLE)
+molecule.add_bond(2, 8, algomol.BondType.SINGLE)
+
+# Initialize the molecule
+molecule.init_mol()
+
+# Generate equivalence classes
+molecule.generate_equivalence_classes(algomol.QueryTypeFlag.TOPOLOGICAL)
+
+# Get equivalence classes
+classes = molecule.get_equivalence_classes(algomol.QueryTypeFlag.TOPOLOGICAL)</code></pre>
+            </div>
+
+            <div class="code-section">
+                <h4>C++ API</h4>
+                <pre><code class="language-cpp">#include "AlgoMol/molecules.hpp"
+
+int main() {
+    // Create a molecule
+    auto molecule = std::make_shared&lt;AlgoMol::molecules::MolGraph&gt;("ethane");
+    
+    // Add atoms
+    molecule-&gt;addAtom(1, AlgoMol::elements::_CARBON);
+    molecule-&gt;addAtom(2, AlgoMol::elements::_CARBON);
+    molecule-&gt;addAtom(3, AlgoMol::elements::_HYDROGEN);
+    molecule-&gt;addAtom(4, AlgoMol::elements::_HYDROGEN);
+    molecule-&gt;addAtom(5, AlgoMol::elements::_HYDROGEN);
+    molecule-&gt;addAtom(6, AlgoMol::elements::_HYDROGEN);
+    molecule-&gt;addAtom(7, AlgoMol::elements::_HYDROGEN);
+    molecule-&gt;addAtom(8, AlgoMol::elements::_HYDROGEN);
+    
+    // Add bonds
+    molecule-&gt;addBond(1, 2, AlgoMol::bonds::BondType::SINGLE);
+    molecule-&gt;addBond(1, 3, AlgoMol::bonds::BondType::SINGLE);
+    molecule-&gt;addBond(1, 4, AlgoMol::bonds::BondType::SINGLE);
+    molecule-&gt;addBond(1, 5, AlgoMol::bonds::BondType::SINGLE);
+    molecule-&gt;addBond(2, 6, AlgoMol::bonds::BondType::SINGLE);
+    molecule-&gt;addBond(2, 7, AlgoMol::bonds::BondType::SINGLE);
+    molecule-&gt;addBond(2, 8, AlgoMol::bonds::BondType::SINGLE);
+    
+    // Initialize the molecule
+    molecule-&gt;init();
+    
+    // Generate equivalence classes
+    molecule-&gt;generateEquivalenceClasses(AlgoMol::molecules::QueryTypeFlag::TOPOLOGICAL);
+    
+    // Get equivalence classes
+    auto classes = molecule-&gt;getEquivalenceClasses(AlgoMol::molecules::QueryTypeFlag::TOPOLOGICAL);
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- ——— API Reference ——— -->
+        <section id="api-reference">
+            <h2>API Reference</h2>
+
+            <h3>Core Classes</h3>
+            <div class="api-grid">
+                <div class="api-card">
+                    <h5>MolGraph</h5>
+                    <p>Main class for molecular graph representation</p>
+                </div>
+                <div class="api-card">
+                    <h5>Atom&lt;Element&gt;</h5>
+                    <p>Templated class for atoms of different elements</p>
+                </div>
+                <div class="api-card">
+                    <h5>Bond&lt;BondType&gt;</h5>
+                    <p>Templated class for different bond types</p>
+                </div>
+                <div class="api-card">
+                    <h5>Geometry&lt;GeometryType&gt;</h5>
+                    <p>Templated class for VSEPR geometries</p>
+                </div>
+            </div>
+
+            <h3>Key Functions</h3>
+            <div class="api-grid">
+                <div class="api-card">
+                    <h5>addAtom()</h5>
+                    <p>Add an atom to a molecule</p>
+                </div>
+                <div class="api-card">
+                    <h5>addBond()</h5>
+                    <p>Add a bond between atoms</p>
+                </div>
+                <div class="api-card">
+                    <h5>init()</h5>
+                    <p>Initialize a molecule after adding atoms and bonds</p>
+                </div>
+                <div class="api-card">
+                    <h5>generateEquivalenceClasses()</h5>
+                    <p>Compute equivalence classes</p>
+                </div>
+                <div class="api-card">
+                    <h5>isTopologyEquivalent()</h5>
+                    <p>Check if two atoms are topologically equivalent</p>
+                </div>
+                <div class="api-card">
+                    <h5>isChemicallyEquivalent()</h5>
+                    <p>Check if two atoms are chemically equivalent</p>
+                </div>
+                <div class="api-card">
+                    <h5>setCisAtoms()</h5>
+                    <p>Set cis stereochemistry</p>
+                </div>
+                <div class="api-card">
+                    <h5>setOrientations()</h5>
+                    <p>Set atom orientations</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ——— Contact ——— -->
+        <section id="contact">
+            <h2>Get Started</h2>
+            <p>Ready to integrate AlgoMol Core into your project? Install the library and explore the examples to see
+                how it can accelerate your molecular modeling workflows.</p>
+
+            <div class="hero-buttons" style="margin-top: 2rem;">
+                <a href="https://pypi.org/project/algomol/" target="_blank" class="cta-button primary">
+                    <i class="fab fa-python"></i> Install from PyPI
+                </a>
+            </div>
+
+            <p style="margin-top: 2rem;">For questions and support, please contact: <a
+                    href="mailto:lanl2vz@algomol.com">lanl2vz@algomol.com</a></p>
+        </section>
+
+    </main>
+
+    <!-- ——— Footer ——— -->
+    <footer>
+        <p>&copy; 2025 AlgoMol LLC. All rights reserved.</p>
+        <div class="footer-social">
+            <a href="https://github.com/AlgoMol-dev" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+    </footer>
+
+    <!-- Add syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+</body>
+
+</html>

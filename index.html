@@ -221,6 +221,116 @@
             letter-spacing: -0.02em;
         }
 
+        /* ——— How It Works / Process ——— */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(26, 188, 156, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            transition: 0.3s;
+        }
+
+        .process-step:hover {
+            transform: translateY(-5px);
+            border-color: #1abc9c;
+            background: rgba(26, 188, 156, 0.1);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #1abc9c;
+            color: #000;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .process-step h3 {
+            color: #1abc9c;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .process-step p {
+            color: #c8c8c8;
+            line-height: 1.6;
+        }
+
+        /* ——— Features Section ——— */
+        .features-section {
+            background: #0a0f24;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+        }
+
+        .feature-highlight {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(26, 188, 156, 0.2);
+        }
+
+        .feature-content h3 {
+            color: #1abc9c;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-content p {
+            color: #e0e0e0;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        /* ——— Use Cases ——— */
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .use-case-card {
+            background: linear-gradient(135deg, #0a0f24, #1c1c1c);
+            border: 1px solid rgba(26, 188, 156, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: 0.3s;
+        }
+
+        .use-case-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
+            border-color: #1abc9c;
+        }
+
+        .use-case-card h3 {
+            color: #1abc9c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .use-case-card p {
+            color: #c8c8c8;
+            line-height: 1.6;
+        }
+
 
 
         /* ——— ReactWise-style additions ——— */
@@ -340,7 +450,8 @@
                 <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo">
             </a>
             <nav class="site-nav">
-                <a href="#services">Solutions</a>
+                <a href="#features">Solutions</a>
+                <a href="/algomol-core.html">Library</a>
                 <a href="#team">Team</a>
                 <a href="#news">News</a>
                 <a href="#careers">Careers</a>
@@ -360,68 +471,102 @@
                 <p class="hero-subtitle">Cut analysis time from hours to seconds with high‑accuracy chemical‑shift
                     forecasts and automated peak assignments.</p>
                 <div class="hero-buttons">
-                    <a href="#services" class="cta-button primary">Explore Solutions</a>
-                    <a href="#contact" class="cta-button secondary">Get Started</a>
+                    <a href="#how-it-works" class="cta-button primary">See How It Works</a>
+                    <a href="#book-demo" class="cta-button secondary">Book a Demo</a>
                 </div>
             </div>
         </section>
 
-        <!-- ——— Pillars ——— -->
-        <section id="pillars" class="pillars-section">
-            <div class="pillars-grid">
-                <div class="pillar-card">
-                    <h3>Predict</h3>
-                    <p>Rapidly develop AI models to predict molecular properties and reaction outcomes.</p>
+        <!-- ——— How It Works ——— -->
+        <section id="how-it-works">
+            <h2>How AlgoMol Transforms NMR Prediction</h2>
+            <p>Traditional DFT calculations take hours or days. AlgoMol delivers quantum-accurate predictions in seconds
+                by combining physics-based descriptors with advanced machine learning.</p>
+
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <h3>Upload Structure</h3>
+                    <p>Submit your molecule as SMILES, MOL, or SDF format</p>
                 </div>
-                <div class="pillar-card">
-                    <h3>Automate</h3>
-                    <p>Seamlessly connect with automated labs to accelerate experiment cycles.</p>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <h3>Physics-Informed Analysis</h3>
+                    <p>Graph neural networks process quantum descriptors and molecular topology</p>
                 </div>
-                <div class="pillar-card">
-                    <h3>Insights</h3>
-                    <p>Gain deep analytical understanding through interactive visual dashboards.</p>
-                </div>
-                <div class="pillar-card">
-                    <h3>Collaborate</h3>
-                    <p>Work faster together with secure cloud-based data sharing and project spaces.</p>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <h3>Instant Results</h3>
+                    <p>Receive chemical shifts, peak assignments, and uncertainty estimates</p>
                 </div>
             </div>
         </section>
 
+        <!-- ——— Key Features ——— -->
+        <section id="features" class="features-section">
+            <h2>Advanced NMR Prediction Capabilities</h2>
 
-
-        <!-- ——— Solutions / Services ——— -->
-        <section id="services">
-            <h2>Predict NMR Spectra with Physics‑Informed&nbsp;ML</h2>
-
-            <p>AlgoMol fuses quantum‑chemical descriptors with modern graph neural networks to deliver <strong>fast,
-                    accurate 1H, 13C, 19F, and 31P NMR chemical‑shift predictions</strong> for molecules of any size.
-                Upload a SMILES, MOL, or SDF and receive peak lists, assignments, and spectrum plots in seconds.</p>
+            <div class="feature-highlight">
+                <div class="feature-content">
+                    <h3>Multi-Nuclear Support</h3>
+                    <p>Accurate predictions for <strong>1H, 13C, 19F, and 31P</strong> nuclei with nucleus-specific
+                        models trained on extensive spectroscopic databases.</p>
+                </div>
+                <div class="feature-content">
+                    <h3>Quantum-Chemical Foundation</h3>
+                    <p>DFT-level electronic descriptors capture chemical environment effects that pure empirical models
+                        miss, ensuring reliable predictions for novel molecules.</p>
+                </div>
+            </div>
 
             <div class="service-grid">
                 <div class="service-card">
-                    <h3>Physics‑Augmented Models</h3>
-                    <p>DFT‑level electronic descriptors enrich our training data so the model generalises beyond the
-                        empirical range.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Graph Neural Networks</h3>
-                    <p>Message‑passing captures long‑range effects such as ring currents and stereochemical shielding.
+                    <h3>Sub-Second Predictions</h3>
+                    <p>Replace hours of DFT calculations with instant ML inference while maintaining chemical accuracy.
                     </p>
                 </div>
                 <div class="service-card">
-                    <h3>Uncertainty &amp; Validation</h3>
-                    <p>Every prediction includes calibrated error bars and similarity scores to reference spectra.</p>
+                    <h3>Uncertainty Quantification</h3>
+                    <p>Bayesian inference provides calibrated confidence intervals for every predicted chemical shift.
+                    </p>
                 </div>
                 <div class="service-card">
-                    <h3>Seamless Workflow</h3>
-                    <p>REST API and CLI integrations let you batch‑process libraries or drive automated synthesis loops.
-                    </p>
+                    <h3>Automated Peak Assignment</h3>
+                    <p>AI-powered assignment algorithms match predicted shifts to experimental spectra with confidence
+                        scores.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Scalable Integration</h3>
+                    <p>REST API and CLI tools enable batch processing and seamless workflow integration.</p>
                 </div>
             </div>
+        </section>
 
-            <div class="hero-buttons" style="margin-top:2rem;">
-                <a href="#book-demo" class="cta-button primary">Book a Demo</a>
+        <!-- ——— Use Cases ——— -->
+        <section id="use-cases">
+            <h2>Accelerate Your Research Workflow</h2>
+
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <h3>Structure Elucidation</h3>
+                    <p>Rapidly validate proposed structures by comparing predicted vs. experimental NMR data, reducing
+                        analysis time from days to minutes.</p>
+                </div>
+                <div class="use-case-card">
+                    <h3>Synthetic Planning</h3>
+                    <p>Predict NMR signatures of target molecules and intermediates to guide synthesis route design and
+                        monitor reaction progress.</p>
+                </div>
+                <div class="use-case-card">
+                    <h3>Database Screening</h3>
+                    <p>Generate NMR predictions for large molecular libraries to prioritize candidates and predict
+                        analytical challenges.</p>
+                </div>
+                <div class="use-case-card">
+                    <h3>Method Development</h3>
+                    <p>Optimize NMR experiments by predicting chemical shift ranges and multiplicities before acquiring
+                        spectra.</p>
+                </div>
             </div>
         </section>
 
@@ -429,9 +574,11 @@
 
         <!-- ——— Book-a-Demo ——— -->
         <section id="book-demo" class="cta-demo-section">
-            <h2>Ready to Accelerate Your Research?</h2>
-            <p>Book a 30-minute demo with our scientists to see AlgoMol in action.</p>
-            <a href="mailto:lanl2vz@AlgoMol.com?subject=Book%20a%20Demo" class="cta-button primary">Book a Demo</a>
+            <h2>Experience AlgoMol in Action</h2>
+            <p>See live NMR predictions on your molecules. Our scientists will walk you through the platform and discuss
+                how AlgoMol can accelerate your research workflow.</p>
+            <a href="mailto:lanl2vz@AlgoMol.com?subject=Book%20a%20Demo&body=Hi,%0D%0A%0D%0AI'd like to schedule a demo of AlgoMol's NMR prediction platform.%0D%0A%0D%0AName:%0D%0AOrganization:%0D%0AResearch Focus:%0D%0APreferred Time:"
+                class="cta-button primary">Schedule Your Demo</a>
         </section>
 
         <!-- ——— Contact ——— -->
