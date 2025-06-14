@@ -48,7 +48,7 @@
         .header-inner {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0.15rem 0.5rem;
+            padding: 0.75rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -64,6 +64,17 @@
         .site-logo:hover {
             filter: drop-shadow(0 0 20px rgba(0, 255, 127, 0.7));
             transform: scale(1.04);
+        }
+
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
         }
 
         .site-nav {
@@ -97,7 +108,7 @@
         main {
             max-width: 1200px;
             margin: 2rem auto;
-            padding: 2rem;
+            padding: 1rem;
             background-color: #1c1c1c;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -124,7 +135,7 @@
         /* ——— Hero ——— */
         .hero-section {
             text-align: center;
-            padding: 4rem 0;
+            padding: 4rem 2rem;
             background: linear-gradient(135deg, #0a0f24, #1c1c1c);
             border-radius: 20px;
             margin-bottom: 3rem;
@@ -146,7 +157,7 @@
         }
 
         .hero-content h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 1.5rem;
@@ -155,7 +166,7 @@
         }
 
         .hero-subtitle {
-            font-size: 1.4rem;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
             color: #b0b0b0;
             margin-bottom: 2rem;
             max-width: 600px;
@@ -179,6 +190,8 @@
             transition: all 0.3s ease;
             border: 2px solid;
             display: inline-block;
+            min-width: 140px;
+            text-align: center;
         }
 
         .cta-button.primary {
@@ -210,10 +223,11 @@
         /* ——— Sections: general ——— */
         section {
             margin-bottom: 3rem;
+            padding: 0 1rem;
         }
 
         section h2 {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 2.5rem);
             color: #1abc9c;
             margin-bottom: 1rem;
             font-weight: 600;
@@ -222,7 +236,7 @@
         }
 
         section h3 {
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
             color: #1abc9c;
             margin-bottom: 1rem;
             font-weight: 600;
@@ -243,6 +257,7 @@
             border-radius: 50px;
             font-weight: 600;
             transition: background 0.3s, color 0.3s;
+            white-space: nowrap;
         }
 
         .cta-nav:hover {
@@ -289,6 +304,7 @@
             border-radius: 12px;
             padding: 2rem;
             margin: 2rem 0;
+            overflow-x: auto;
         }
 
         .code-section h4 {
@@ -303,7 +319,7 @@
             padding: 1.5rem;
             overflow-x: auto;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.4;
         }
 
@@ -313,18 +329,20 @@
             padding: 0.2rem 0.4rem;
             border-radius: 4px;
             color: #1abc9c;
+            font-size: 0.9em;
         }
 
         pre code {
             background: none;
             padding: 0;
             color: #e0e0e0;
+            font-size: 0.85rem;
         }
 
         /* Installation steps */
         .install-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -365,7 +383,7 @@
             background-color: #0a0f24;
             color: #c8c8c8;
             text-align: center;
-            padding: 2rem 0;
+            padding: 2rem 1rem;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
@@ -420,6 +438,145 @@
             color: #c8c8c8;
             font-size: 0.9rem;
         }
+
+        /* ——— Mobile Responsive ——— */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .site-nav {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100vh;
+                background: #0a0f24;
+                flex-direction: column;
+                justify-content: center;
+                gap: 2rem;
+                transition: left 0.3s ease;
+                z-index: 999;
+            }
+
+            .site-nav.active {
+                left: 0;
+            }
+
+            .site-nav a {
+                font-size: 1.2rem;
+                margin: 1rem 0;
+                padding: 1rem;
+                border-bottom: none;
+                width: 100%;
+                text-align: center;
+            }
+
+            .site-nav a:hover {
+                background: rgba(26, 188, 156, 0.1);
+                border-bottom: none;
+            }
+
+            .header-inner {
+                padding: 1rem;
+            }
+
+            .site-logo {
+                width: 140px;
+            }
+
+            main {
+                margin-top: 70px;
+                padding: 1rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+
+            .hero-section {
+                padding: 3rem 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+                padding: 1.2rem 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .install-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .api-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .code-section {
+                padding: 1.5rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+
+            pre code {
+                font-size: 0.8rem;
+            }
+
+            section {
+                padding: 0 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                font-size: 1rem;
+                padding: 1rem 1.5rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .install-card {
+                padding: 1.5rem;
+            }
+
+            .code-section {
+                padding: 1rem;
+            }
+
+            pre {
+                padding: 0.8rem;
+                font-size: 0.75rem;
+            }
+
+            pre code {
+                font-size: 0.75rem;
+            }
+        }
     </style>
 </head>
 
@@ -431,6 +588,9 @@
             <a href="/" class="logo-link">
                 <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo">
             </a>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
             <nav class="site-nav">
                 <a href="/#services">Solutions</a>
                 <a href="/algomol-core.html">Library</a>
@@ -714,6 +874,29 @@ int main() {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const siteNav = document.querySelector('.site-nav');
+
+        menuToggle.addEventListener('click', () => {
+            siteNav.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.site-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                siteNav.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            });
+        });
+    </script>
 
 </body>
 

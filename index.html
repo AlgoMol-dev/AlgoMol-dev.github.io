@@ -47,7 +47,7 @@
         .header-inner {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0.15rem 0.5rem;
+            padding: 0.75rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -65,6 +65,17 @@
             transform: scale(1.04);
         }
 
+        /* Mobile menu toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
         .site-nav {
             display: flex;
             gap: 1.25rem;
@@ -72,7 +83,6 @@
         }
 
         .site-nav a {
-            /* reuse nav link styles but ensure inline */
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: .08rem;
@@ -97,7 +107,7 @@
         main {
             max-width: 1200px;
             margin: 2rem auto;
-            padding: 2rem;
+            padding: 1rem;
             background-color: #1c1c1c;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -124,7 +134,7 @@
         /* ——— Hero ——— */
         .hero-section {
             text-align: center;
-            padding: 4rem 0;
+            padding: 4rem 2rem;
             background: linear-gradient(135deg, #0a0f24, #1c1c1c);
             border-radius: 20px;
             margin-bottom: 3rem;
@@ -146,7 +156,7 @@
         }
 
         .hero-content h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 1.5rem;
@@ -155,7 +165,7 @@
         }
 
         .hero-subtitle {
-            font-size: 1.4rem;
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
             color: #b0b0b0;
             margin-bottom: 2rem;
             max-width: 600px;
@@ -179,6 +189,8 @@
             transition: all 0.3s ease;
             border: 2px solid;
             display: inline-block;
+            min-width: 140px;
+            text-align: center;
         }
 
         .cta-button.primary {
@@ -210,10 +222,11 @@
         /* ——— Sections: general ——— */
         section {
             margin-bottom: 3rem;
+            padding: 0 1rem;
         }
 
         section h2 {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 2.5rem);
             color: #1abc9c;
             margin-bottom: 1rem;
             font-weight: 600;
@@ -224,7 +237,7 @@
         /* ——— How It Works / Process ——— */
         .process-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -279,7 +292,7 @@
 
         .feature-highlight {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             margin: 2rem 0 3rem;
             padding: 2rem 0;
@@ -331,8 +344,6 @@
             line-height: 1.6;
         }
 
-
-
         /* ——— ReactWise-style additions ——— */
         .cta-nav {
             background: #1abc9c;
@@ -341,6 +352,7 @@
             border-radius: 50px;
             font-weight: 600;
             transition: background 0.3s, color 0.3s;
+            white-space: nowrap;
         }
 
         .cta-nav:hover {
@@ -424,19 +436,183 @@
         .cta-demo-section {
             background: linear-gradient(135deg, #0a0f24, #1c1c1c);
             text-align: center;
-            padding: 4rem 1rem;
+            padding: 4rem 2rem;
         }
 
         .cta-demo-section h2 {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 2.5rem);
             color: #fff;
             margin-bottom: 1rem;
         }
 
         .cta-demo-section p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             color: #b0b0b0;
             margin-bottom: 2rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0a0f24;
+            color: #c8c8c8;
+            text-align: center;
+            padding: 2rem 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-social {
+            margin-top: 1rem;
+        }
+
+        .footer-social a {
+            color: #1abc9c;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .footer-social a:hover {
+            color: #16a085;
+        }
+
+        /* Links */
+        a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ——— Mobile Responsive ——— */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .site-nav {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100vh;
+                background: #0a0f24;
+                flex-direction: column;
+                justify-content: center;
+                gap: 2rem;
+                transition: left 0.3s ease;
+                z-index: 999;
+            }
+
+            .site-nav.active {
+                left: 0;
+            }
+
+            .site-nav a {
+                font-size: 1.2rem;
+                margin: 1rem 0;
+                padding: 1rem;
+                border-bottom: none;
+                width: 100%;
+                text-align: center;
+            }
+
+            .site-nav a:hover {
+                background: rgba(26, 188, 156, 0.1);
+                border-bottom: none;
+            }
+
+            .header-inner {
+                padding: 1rem;
+            }
+
+            .site-logo {
+                width: 140px;
+            }
+
+            main {
+                margin-top: 70px;
+                padding: 1rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+
+            .hero-section {
+                padding: 3rem 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+                padding: 1.2rem 2rem;
+            }
+
+            .process-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .use-case-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .feature-highlight {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .features-section {
+                padding: 2rem 1rem;
+            }
+
+            .cta-demo-section {
+                padding: 3rem 1rem;
+            }
+
+            section {
+                padding: 0 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .cta-button {
+                font-size: 1rem;
+                padding: 1rem 1.5rem;
+            }
+
+            .process-step {
+                padding: 1.5rem;
+            }
+
+            .use-case-card {
+                padding: 1.5rem;
+            }
+
+            .service-card {
+                padding: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -449,6 +625,9 @@
             <a href="/" class="logo-link">
                 <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo">
             </a>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
             <nav class="site-nav">
                 <a href="#features">Solutions</a>
                 <a href="/algomol-core.html">Library</a>
@@ -601,6 +780,29 @@
             <a href="https://github.com/AlgoMol-dev" target="_blank"><i class="fab fa-github"></i></a>
         </div>
     </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const siteNav = document.querySelector('.site-nav');
+
+        menuToggle.addEventListener('click', () => {
+            siteNav.classList.toggle('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-times');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.site-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                siteNav.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            });
+        });
+    </script>
 
 </body>
 
