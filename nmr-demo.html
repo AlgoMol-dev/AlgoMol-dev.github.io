@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMR Spectrum Calculator - AlgoMol Demo</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ——— Base styles ——— */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #e0e0e0;
+            scroll-behavior: smooth;
+            font-size: 16px;
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        /* ——— Header ——— */
+        .site-header {
+            background: #0a0f24;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem 0;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .site-logo {
+            width: 160px;
+            max-width: 40vw;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 127, 0.4));
+            transition: filter .3s, transform .3s;
+        }
+
+        .site-logo:hover {
+            filter: drop-shadow(0 0 20px rgba(0, 255, 127, 0.7));
+            transform: scale(1.04);
+        }
+
+        /* ——— Main Content ——— */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+
+        .demo-container {
+            background: #1c1c1c;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-header h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+
+        .demo-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-inline: auto;
+            line-height: 1.6;
+        }
+
+        .demo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        /* ——— Input Section ——— */
+        .input-section {
+            background: rgba(26, 188, 156, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(26, 188, 156, 0.2);
+            padding: 2rem;
+        }
+
+        .input-section h2 {
+            font-size: 1.5rem;
+            color: #1abc9c;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-method {
+            margin-bottom: 2rem;
+        }
+
+        .method-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #1abc9c;
+            background: transparent;
+            color: #1abc9c;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .tab-button.active {
+            background: #1abc9c;
+            color: #000;
+        }
+
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 188, 156, 0.3);
+        }
+
+        .input-content {
+            display: none;
+        }
+
+        .input-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #1abc9c;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 2rem;
+            border: 2px dashed #1abc9c;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(26, 188, 156, 0.05);
+        }
+
+        .file-upload-label:hover {
+            background: rgba(26, 188, 156, 0.1);
+            border-color: #16a085;
+        }
+
+        .file-upload-label i {
+            font-size: 2rem;
+            color: #1abc9c;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload-text {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .file-upload-hint {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: #1abc9c;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .calculate-button:hover {
+            background: #16a085;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26, 188, 156, 0.4);
+        }
+
+        .calculate-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ——— Results Section ——— */
+        .results-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+        }
+
+        .results-section h2 {
+            font-size: 1.5rem;
+            color: #1abc9c;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .results-placeholder {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #8a8a8a;
+        }
+
+        .results-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #1abc9c;
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spectrum-container {
+            background: #000;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .spectrum-plot {
+            width: 100%;
+            height: 300px;
+            background: #111;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .results-data {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            color: #1abc9c;
+            font-weight: 600;
+        }
+
+        .download-button {
+            padding: 0.75rem 1.5rem;
+            background: rgba(26, 188, 156, 0.2);
+            color: #1abc9c;
+            border: 2px solid #1abc9c;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .download-button:hover {
+            background: #1abc9c;
+            color: #000;
+            transform: translateY(-2px);
+        }
+
+        /* ——— Info Section ——— */
+        .info-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(26, 188, 156, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(26, 188, 156, 0.2);
+        }
+
+        .info-section h3 {
+            color: #1abc9c;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
+        .info-item h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .info-item p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* ——— Responsive Design ——— */
+        @media (max-width: 768px) {
+            .demo-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .demo-container {
+                padding: 2rem 1rem;
+            }
+
+            .method-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-button {
+                flex: 1;
+                min-width: 100px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .demo-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .input-section,
+            .results-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo">
+        </div>
+    </header>
+
+    <main>
+        <div class="demo-container">
+            <div class="demo-header">
+                <h1>¹H NMR Spectrum Predictor</h1>
+                <p class="demo-subtitle">
+                    Upload your molecular structure and get accurate proton NMR spectrum predictions powered by
+                    advanced quantum chemistry calculations in the cloud.
+                </p>
+            </div>
+
+            <div class="demo-content">
+                <!-- Input Section -->
+                <div class="input-section">
+                    <h2>
+                        <i class="fas fa-upload"></i>
+                        Input Structure
+                    </h2>
+
+                    <div class="input-method">
+                        <div class="method-tabs">
+                            <button class="tab-button active" data-tab="smiles">SMILES</button>
+                            <button class="tab-button" data-tab="inchi">InChI</button>
+                            <button class="tab-button" data-tab="molfile">MOL File</button>
+                        </div>
+
+                        <div class="input-content active" id="smiles-input">
+                            <div class="form-group">
+                                <label class="form-label">SMILES String</label>
+                                <input type="text" class="form-input" placeholder="e.g., CCO (ethanol)" value="CCO"
+                                    id="smiles-field">
+                            </div>
+                        </div>
+
+                        <div class="input-content" id="inchi-input">
+                            <div class="form-group">
+                                <label class="form-label">InChI String</label>
+                                <textarea class="form-textarea" placeholder="e.g., InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3"
+                                    id="inchi-field"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="input-content" id="molfile-input">
+                            <div class="form-group">
+                                <div class="file-upload">
+                                    <input type="file" class="file-upload-input" accept=".mol,.sdf" id="mol-file">
+                                    <label for="mol-file" class="file-upload-label">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <div class="file-upload-text">Click to upload MOL file</div>
+                                        <div class="file-upload-hint">Supports .mol and .sdf formats</div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="calculate-button" id="calculate-btn">
+                        <i class="fas fa-calculator"></i>
+                        Calculate NMR Spectrum
+                    </button>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section">
+                    <h2>
+                        <i class="fas fa-chart-line"></i>
+                        Results
+                    </h2>
+
+                    <div class="results-placeholder" id="results-placeholder">
+                        <i class="fas fa-flask"></i>
+                        <p>Submit a molecular structure to see the calculated ¹H NMR spectrum</p>
+                    </div>
+
+                    <div class="loading-state" id="loading-state" style="display: none;">
+                        <i class="fas fa-spinner"></i>
+                        <p>Computing NMR spectrum...</p>
+                        <p style="font-size: 0.9rem; color: #8a8a8a;">This may take 30-60 seconds</p>
+                    </div>
+
+                    <div class="results-display" id="results-display" style="display: none;">
+                        <div class="spectrum-container">
+                            <div class="spectrum-plot">
+                                <canvas id="spectrum-canvas" width="500" height="300"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="results-data">
+                            <h4 style="color: #1abc9c; margin-bottom: 1rem;">Peak Assignment</h4>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Chemical Shift (ppm)</th>
+                                        <th>Multiplicity</th>
+                                        <th>Integration</th>
+                                        <th>Assignment</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="peaks-table">
+                                    <!-- Peaks will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button class="download-button" id="download-btn">
+                            <i class="fas fa-download"></i>
+                            Download Results (JSON)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section">
+                <h3>About This Demo</h3>
+                <p>
+                    This demonstration showcases AlgoMol's cloud-based NMR prediction service.
+                    Upload molecular structures in various formats to receive accurate ¹H NMR spectra
+                    calculated using state-of-the-art quantum chemistry methods.
+                </p>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>Supported Formats</h4>
+                        <p>SMILES strings, InChI identifiers, and MOL/SDF files</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Calculation Method</h4>
+                        <p>DFT-based chemical shift prediction with solvent effects</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Accuracy</h4>
+                        <p>Typical MAE < 0.2 ppm for organic molecules</p>
+                    </div>
+                    <div class="info-item">
+                        <h4>Processing Time</h4>
+                        <p>30-60 seconds for typical small molecules</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+
+                // Update active tab
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                // Update active content
+                document.querySelectorAll('.input-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId + '-input').classList.add('active');
+            });
+        });
+
+        // File upload feedback
+        document.getElementById('mol-file').addEventListener('change', function (e) {
+            const label = document.querySelector('.file-upload-label');
+            const text = label.querySelector('.file-upload-text');
+
+            if (e.target.files.length > 0) {
+                text.textContent = `Selected: ${e.target.files[0].name}`;
+                label.style.backgroundColor = 'rgba(26, 188, 156, 0.2)';
+            } else {
+                text.textContent = 'Click to upload MOL file';
+                label.style.backgroundColor = 'rgba(26, 188, 156, 0.05)';
+            }
+        });
+
+        // Calculate button functionality
+        document.getElementById('calculate-btn').addEventListener('click', function () {
+            const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+            let hasInput = false;
+
+            // Check if there's input based on active tab
+            if (activeTab === 'smiles') {
+                hasInput = document.getElementById('smiles-field').value.trim() !== '';
+            } else if (activeTab === 'inchi') {
+                hasInput = document.getElementById('inchi-field').value.trim() !== '';
+            } else if (activeTab === 'molfile') {
+                hasInput = document.getElementById('mol-file').files.length > 0;
+            }
+
+            if (!hasInput) {
+                alert('Please provide a molecular structure input');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('results-placeholder').style.display = 'none';
+            document.getElementById('results-display').style.display = 'none';
+            document.getElementById('loading-state').style.display = 'block';
+
+            // Simulate calculation delay
+            setTimeout(() => {
+                showResults();
+            }, 3000);
+        });
+
+        function showResults() {
+            // Hide loading state
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('results-display').style.display = 'block';
+
+            // Draw sample spectrum
+            drawSpectrum();
+
+            // Populate sample data
+            const peaksTable = document.getElementById('peaks-table');
+            peaksTable.innerHTML = `
+                <tr>
+                    <td>1.25</td>
+                    <td>t</td>
+                    <td>3H</td>
+                    <td>CH₃</td>
+                </tr>
+                <tr>
+                    <td>3.65</td>
+                    <td>q</td>
+                    <td>2H</td>
+                    <td>CH₂</td>
+                </tr>
+                <tr>
+                    <td>4.90</td>
+                    <td>s</td>
+                    <td>1H</td>
+                    <td>OH</td>
+                </tr>
+            `;
+        }
+
+        function drawSpectrum() {
+            const canvas = document.getElementById('spectrum-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Set up styling
+            ctx.strokeStyle = '#1abc9c';
+            ctx.lineWidth = 2;
+            ctx.fillStyle = '#1abc9c';
+
+            // Draw axes
+            ctx.beginPath();
+            ctx.moveTo(50, 50);
+            ctx.lineTo(50, 250);
+            ctx.lineTo(450, 250);
+            ctx.stroke();
+
+            // Draw sample peaks (ethanol)
+            const peaks = [
+                { x: 380, height: 100 }, // 1.25 ppm
+                { x: 200, height: 80 },  // 3.65 ppm
+                { x: 120, height: 40 }   // 4.90 ppm
+            ];
+
+            peaks.forEach(peak => {
+                ctx.beginPath();
+                ctx.moveTo(peak.x, 250);
+                ctx.lineTo(peak.x, 250 - peak.height);
+                ctx.stroke();
+            });
+
+            // Add labels
+            ctx.fillStyle = '#fff';
+            ctx.font = '12px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('10', 60, 270);
+            ctx.fillText('5', 250, 270);
+            ctx.fillText('0', 440, 270);
+
+            ctx.save();
+            ctx.translate(20, 150);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText('Intensity', 0, 0);
+            ctx.restore();
+
+            ctx.fillText('Chemical Shift (ppm)', 250, 290);
+        }
+
+        // Download functionality
+        document.getElementById('download-btn').addEventListener('click', function () {
+            const data = {
+                molecule: document.getElementById('smiles-field').value || 'CCO',
+                peaks: [
+                    { shift: 1.25, multiplicity: 't', integration: '3H', assignment: 'CH₃' },
+                    { shift: 3.65, multiplicity: 'q', integration: '2H', assignment: 'CH₂' },
+                    { shift: 4.90, multiplicity: 's', integration: '1H', assignment: 'OH' }
+                ],
+                calculation_method: 'DFT B3LYP/6-311++G(d,p)',
+                solvent: 'CDCl₃',
+                timestamp: new Date().toISOString()
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'nmr-results.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+
+</html>
