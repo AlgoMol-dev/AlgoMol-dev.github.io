@@ -5,7 +5,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlgoMol LLC – Computational Chemistry and Molecular Sciences</title>
+    <title>AlgoMol – Automated Structure Elucidation (NMR‑first SaaS)</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
@@ -629,7 +629,8 @@
                 <i class="fas fa-bars"></i>
             </button>
             <nav class="site-nav">
-                <a href="#features">Solutions</a>
+                <a href="#products">Products</a>
+                <a href="#how-it-works">Technology</a>
                 <a href="/algomol-core.html">Library</a>
                 <a href="#team">Team</a>
                 <a href="#news">News</a>
@@ -646,77 +647,119 @@
         <!-- ——— Hero ——— -->
         <section class="hero-section">
             <div class="hero-content">
-                <h1>Physics‑Informed&nbsp;ML for Rapid NMR&nbsp;Prediction</h1>
-                <p class="hero-subtitle">Cut analysis time from hours to seconds with high‑accuracy chemical‑shift
-                    forecasts and automated peak assignments.</p>
+                <h1>Automated Structure Elucidation, NMR‑First</h1>
+                <p class="hero-subtitle">We build AI that turns spectra into structures. NMR prediction is the core of
+                    our computer‑assisted elucidation workflow, delivering fast, accurate shifts and assignments that
+                    power end‑to‑end structure verification.</p>
                 <div class="hero-buttons">
-                    <a href="#how-it-works" class="cta-button primary">See How It Works</a>
+                    <a href="#products" class="cta-button primary">Explore Products</a>
                     <a href="#book-demo" class="cta-button secondary">Book a Demo</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ——— Products ——— -->
+        <section id="products" class="features-section">
+            <h2>Our First SaaS Products (Liquid‑State NMR)</h2>
+
+            <div class="feature-highlight">
+                <div class="feature-content">
+                    <h3>AlgoMol Predictor</h3>
+                    <p>High‑accuracy chemical‑shift prediction for <strong>1H, 13C, 19F, 31P</strong> with calibrated
+                        uncertainty. Built for speed (seconds, not hours) and scale (batch via API/CLI).
+                        Physics‑informed ML captures subtle electronic effects while remaining production‑fast.</p>
+                </div>
+                <div class="feature-content">
+                    <h3>AlgoMol Elucidator</h3>
+                    <p>Computer‑assisted structure elucidation from experimental spectra. Automated peak picking and
+                        assignment, candidate ranking/verification against predicted shifts, and interactive review to
+                        close the loop from spectra to structure.</p>
+                </div>
+            </div>
+
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>API & CLI Ready</h3>
+                    <p>Integrate into your pipeline with REST endpoints and command‑line tools for batch jobs and CI/CD
+                        workflows.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Uncertainty by Design</h3>
+                    <p>Every prediction ships with confidence intervals to guide decisions, triage edge cases, and
+                        prioritize review.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Secure by Default</h3>
+                    <p>Isolated projects, role‑based access, and optional on‑prem/private cloud deployment for sensitive
+                        data.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Roadmap: Beyond NMR</h3>
+                    <p>We are extending elucidation to additional characterization techniques (e.g., MS, IR) to provide
+                        multi‑modal evidence for structures.</p>
                 </div>
             </div>
         </section>
 
         <!-- ——— How It Works ——— -->
         <section id="how-it-works">
-            <h2>How AlgoMol Transforms NMR Prediction</h2>
-            <p>Traditional DFT calculations take hours or days. AlgoMol delivers quantum-accurate predictions in seconds
-                by combining physics-based descriptors with advanced machine learning.</p>
+            <h2>How AlgoMol Automates Structure Elucidation</h2>
+            <p>We combine physics‑informed machine learning with domain heuristics to turn spectra into structures. NMR
+                prediction is an essential building block of our computer‑assisted elucidation workflow.</p>
 
             <div class="process-grid">
                 <div class="process-step">
                     <div class="step-number">1</div>
-                    <h3>Upload Structure</h3>
-                    <p>Submit your molecule as SMILES, MOL, or SDF format</p>
+                    <h3>Upload Structure or Spectra</h3>
+                    <p>Submit SMILES/MOL/SDF, or ingest experimental 1D/2D NMR.</p>
                 </div>
                 <div class="process-step">
                     <div class="step-number">2</div>
-                    <h3>Physics-Informed Analysis</h3>
-                    <p>Graph neural networks process quantum descriptors and molecular topology</p>
+                    <h3>Predict & Align</h3>
+                    <p>Fast NMR shift prediction, peak picking, and assignment driven by physics‑informed GNNs.</p>
                 </div>
                 <div class="process-step">
                     <div class="step-number">3</div>
-                    <h3>Instant Results</h3>
-                    <p>Receive chemical shifts, peak assignments, and uncertainty estimates</p>
+                    <h3>Elucidate & Verify</h3>
+                    <p>Rank candidates, verify structures against spectra, and export reports with uncertainties.</p>
                 </div>
             </div>
         </section>
 
         <!-- ——— Key Features ——— -->
         <section id="features" class="features-section">
-            <h2>Advanced NMR Prediction Capabilities</h2>
+            <h2>Why AlgoMol</h2>
 
             <div class="feature-highlight">
                 <div class="feature-content">
-                    <h3>Multi-Nuclear Support</h3>
-                    <p>Accurate predictions for <strong>1H, 13C, 19F, and 31P</strong> nuclei with nucleus-specific
-                        models trained on extensive spectroscopic databases.</p>
+                    <h3>NMR‑First, Elucidation‑Focused</h3>
+                    <p>NMR prediction is central to our approach: accurate shifts and assignments power end‑to‑end
+                        computer‑assisted structure elucidation and verification.</p>
                 </div>
                 <div class="feature-content">
-                    <h3>Quantum-Chemical Foundation</h3>
-                    <p>DFT-level electronic descriptors capture chemical environment effects that pure empirical models
-                        miss, ensuring reliable predictions for novel molecules.</p>
+                    <h3>Production‑Grade SaaS</h3>
+                    <p>Designed for teams: scalable APIs, batch processing, audit trails, and deployment options that
+                        meet your security and throughput needs.</p>
                 </div>
             </div>
 
             <div class="service-grid">
                 <div class="service-card">
-                    <h3>Sub-Second Predictions</h3>
-                    <p>Replace hours of DFT calculations with instant ML inference while maintaining chemical accuracy.
-                    </p>
-                </div>
-                <div class="service-card">
-                    <h3>Uncertainty Quantification</h3>
-                    <p>Bayesian inference provides calibrated confidence intervals for every predicted chemical shift.
-                    </p>
-                </div>
-                <div class="service-card">
                     <h3>Automated Peak Assignment</h3>
-                    <p>AI-powered assignment algorithms match predicted shifts to experimental spectra with confidence
-                        scores.</p>
+                    <p>AI‑assisted matching of predicted shifts to experimental spectra with confidence scoring.</p>
                 </div>
                 <div class="service-card">
-                    <h3>Scalable Integration</h3>
-                    <p>REST API and CLI tools enable batch processing and seamless workflow integration.</p>
+                    <h3>High‑Accuracy Shift Prediction</h3>
+                    <p>Physics‑informed models retain quantum‑level fidelity while delivering sub‑second inference.</p>
+                </div>
+                <div class="service-card">
+                    <h3>Reporting & Audit</h3>
+                    <p>Exportable reports with uncertainty, rationale, and versioned model metadata for traceability.
+                    </p>
+                </div>
+                <div class="service-card">
+                    <h3>Seamless Integration</h3>
+                    <p>API/CLI for LIMS, ELN, and workflow tools; easy scripting for screening libraries and QC.</p>
                 </div>
             </div>
         </section>
@@ -728,8 +771,8 @@
             <div class="use-case-grid">
                 <div class="use-case-card">
                     <h3>Structure Elucidation</h3>
-                    <p>Rapidly validate proposed structures by comparing predicted vs. experimental NMR data, reducing
-                        analysis time from days to minutes.</p>
+                    <p>Rapidly validate proposed structures by comparing predicted vs. experimental NMR and rank
+                        candidates automatically.</p>
                 </div>
                 <div class="use-case-card">
                     <h3>Synthetic Planning</h3>
@@ -738,8 +781,8 @@
                 </div>
                 <div class="use-case-card">
                     <h3>Database Screening</h3>
-                    <p>Generate NMR predictions for large molecular libraries to prioritize candidates and predict
-                        analytical challenges.</p>
+                    <p>Generate predictions for large libraries, triage candidates, and anticipate spectral overlaps or
+                        ambiguities.</p>
                 </div>
                 <div class="use-case-card">
                     <h3>Method Development</h3>
@@ -754,9 +797,9 @@
         <!-- ——— Book-a-Demo ——— -->
         <section id="book-demo" class="cta-demo-section">
             <h2>Experience AlgoMol in Action</h2>
-            <p>See live NMR predictions on your molecules. Our scientists will walk you through the platform and discuss
-                how AlgoMol can accelerate your research workflow.</p>
-            <a href="mailto:lanl2vz@AlgoMol.com?subject=Book%20a%20Demo&body=Hi,%0D%0A%0D%0AI'd like to schedule a demo of AlgoMol's NMR prediction platform.%0D%0A%0D%0AName:%0D%0AOrganization:%0D%0AResearch Focus:%0D%0APreferred Time:"
+            <p>See AlgoMol Predictor and Elucidator on your molecules and spectra. We’ll demo prediction, assignment,
+                and verification workflows tailored to your use cases.</p>
+            <a href="mailto:lanl2vz@AlgoMol.com?subject=Book%20a%20Demo&body=Hi,%0D%0A%0D%0AI'd like to schedule a demo of AlgoMol's Predictor and Elucidator for liquid‑state NMR.%0D%0A%0D%0AName:%0D%0AOrganization:%0D%0AResearch Focus:%0D%0APreferred Time:"
                 class="cta-button primary">Schedule Your Demo</a>
         </section>
 
