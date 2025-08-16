@@ -5,479 +5,56 @@
     <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlgoMol – Automated Structure Elucidation (NMR‑first SaaS)</title>
+    <title>AlgoMol – Automated Structure Elucidation</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* ——— Base styles ——— */
+        /* =====================
+     Modern AI style theme
+     ===================== */
+        :root {
+            --bg: #f7f8fb;
+            --bg-strong: #ffffff;
+            --text: #0b1220;
+            --muted: #586174;
+            --border: rgba(11, 18, 32, 0.08);
+            --card: rgba(255, 255, 255, 0.65);
+            --glass: rgba(255, 255, 255, 0.6);
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            --accent-1: #10b981;
+            /* teal */
+            --accent-2: #6366f1;
+            /* indigo */
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: #e0e0e0;
-            scroll-behavior: smooth;
-            font-size: 16px;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 600px at 80% -10%, rgba(99, 102, 241, .15), transparent 60%),
+                radial-gradient(1000px 600px at -10% 20%, rgba(16, 185, 129, .18), transparent 60%),
+                var(--bg);
             line-height: 1.6;
-            font-weight: 400;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
+            font-size: 16px;
         }
 
-        header {
-            background-color: #0a0f24;
-            color: white;
-            text-align: center;
-            padding: 0;
-            position: relative;
-        }
-
-        /* Sticky header layout */
-        .site-header {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: #0a0f24;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.75rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .site-logo {
-            width: 160px;
-            max-width: 40vw;
-            filter: drop-shadow(0 0 10px rgba(0, 255, 127, 0.4));
-            transition: filter .3s, transform .3s;
-        }
-
-        .site-logo:hover {
-            filter: drop-shadow(0 0 20px rgba(0, 255, 127, 0.7));
-            transform: scale(1.04);
-        }
-
-        /* Mobile menu toggle */
-        .menu-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .site-nav {
-            display: flex;
-            gap: 1.25rem;
-            align-items: center;
-        }
-
-        .site-nav a {
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: .08rem;
-        }
-
-        nav a {
-            color: white;
-            margin: 0 1rem;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08rem;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover {
-            border-bottom: 2px solid white;
-            transition: 0.3s ease-in-out;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 1rem;
-            background-color: #1c1c1c;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        /* offset main content so it doesn't slide under the sticky header */
-        main {
-            margin-top: 85px;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ——— Hero ——— */
-        .hero-section {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #0a0f24, #1c1c1c);
-            border-radius: 20px;
-            margin-bottom: 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(26, 188, 156, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-content h1 {
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            line-height: 1.2;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-            color: #b0b0b0;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-inline: auto;
-            line-height: 1.6;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-button {
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border: 2px solid;
-            display: inline-block;
-            min-width: 140px;
-            text-align: center;
-        }
-
-        .cta-button.primary {
-            background: #1abc9c;
-            color: #000;
-            border-color: #1abc9c;
-        }
-
-        .cta-button.primary:hover {
-            background: #16a085;
-            border-color: #16a085;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.3);
-        }
-
-        .cta-button.secondary {
-            background: transparent;
-            color: #1abc9c;
-            border-color: #1abc9c;
-        }
-
-        .cta-button.secondary:hover {
-            background: #1abc9c;
-            color: #000;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.3);
-        }
-
-        /* ——— Sections: general ——— */
-        section {
-            margin-bottom: 3rem;
-            padding: 0 1rem;
-        }
-
-        section h2 {
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            color: #1abc9c;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-        }
-
-        /* ——— How It Works / Process ——— */
-        .process-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .process-step {
-            text-align: center;
-            padding: 2rem;
-            background: rgba(26, 188, 156, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(26, 188, 156, 0.2);
-            transition: 0.3s;
-        }
-
-        .process-step:hover {
-            transform: translateY(-5px);
-            border-color: #1abc9c;
-            background: rgba(26, 188, 156, 0.1);
-        }
-
-        .step-number {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #1abc9c;
-            color: #000;
-            font-size: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-        }
-
-        .process-step h3 {
-            color: #1abc9c;
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .process-step p {
-            color: #c8c8c8;
-            line-height: 1.6;
-        }
-
-        /* ——— Features Section ——— */
-        .features-section {
-            background: #0a0f24;
-            padding: 3rem 2rem;
-            border-radius: 20px;
-            margin: 3rem 0;
-        }
-
-        .feature-highlight {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0 3rem;
-            padding: 2rem 0;
-            border-bottom: 1px solid rgba(26, 188, 156, 0.2);
-        }
-
-        .feature-content h3 {
-            color: #1abc9c;
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-content p {
-            color: #e0e0e0;
-            line-height: 1.7;
-            font-size: 1.1rem;
-        }
-
-        /* ——— Use Cases ——— */
-        .use-case-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .use-case-card {
-            background: linear-gradient(135deg, #0a0f24, #1c1c1c);
-            border: 1px solid rgba(26, 188, 156, 0.3);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: 0.3s;
-        }
-
-        .use-case-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
-            border-color: #1abc9c;
-        }
-
-        .use-case-card h3 {
-            color: #1abc9c;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .use-case-card p {
-            color: #c8c8c8;
-            line-height: 1.6;
-        }
-
-        /* ——— ReactWise-style additions ——— */
-        .cta-nav {
-            background: #1abc9c;
-            color: #000 !important;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: background 0.3s, color 0.3s;
-            white-space: nowrap;
-        }
-
-        .cta-nav:hover {
-            background: #16a085;
-            color: #fff !important;
-        }
-
-        /* Pillars */
-        .pillars-section {
-            padding: 4rem 1rem;
-            background: #0a0f24;
-            text-align: center;
-        }
-
-        .pillars-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .pillar-card {
-            background: rgba(26, 188, 156, 0.1);
-            border: 1px solid rgba(26, 188, 156, 0.3);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: 0.3s;
-        }
-
-        .pillar-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
-            border-color: #1abc9c;
-        }
-
-        .pillar-card h3 {
-            font-size: 1.6rem;
-            color: #1abc9c;
-            margin-bottom: 1rem;
-        }
-
-        .pillar-card p {
-            color: #c8c8c8;
-            line-height: 1.6;
-        }
-
-        /* Services */
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .service-card {
-            background: #0a0f24;
-            border: 1px solid rgba(26, 188, 156, 0.3);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: 0.3s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(26, 188, 156, 0.2);
-            border-color: #1abc9c;
-        }
-
-        .service-card h3 {
-            color: #1abc9c;
-            margin-bottom: 0.5rem;
-        }
-
-        .service-card p {
-            color: #c8c8c8;
-            line-height: 1.6;
-        }
-
-        /* Book-a-Demo */
-        .cta-demo-section {
-            background: linear-gradient(135deg, #0a0f24, #1c1c1c);
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-
-        .cta-demo-section h2 {
-            font-size: clamp(2rem, 4vw, 2.5rem);
-            color: #fff;
-            margin-bottom: 1rem;
-        }
-
-        .cta-demo-section p {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            color: #b0b0b0;
-            margin-bottom: 2rem;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #0a0f24;
-            color: #c8c8c8;
-            text-align: center;
-            padding: 2rem 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .footer-social {
-            margin-top: 1rem;
-        }
-
-        .footer-social a {
-            color: #1abc9c;
-            font-size: 1.5rem;
-            margin: 0 1rem;
-            transition: color 0.3s;
-        }
-
-        .footer-social a:hover {
-            color: #16a085;
-        }
-
-        /* Links */
         a {
-            color: #1abc9c;
+            color: var(--text);
             text-decoration: none;
         }
 
@@ -485,7 +62,325 @@
             text-decoration: underline;
         }
 
-        /* ——— Mobile Responsive ——— */
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 1.25rem;
+        }
+
+        /* =====================
+     Header (glass + sticky)
+     ===================== */
+        header.site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: saturate(120%) blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: .75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .site-logo {
+            width: 160px;
+            max-width: 40vw;
+            transition: transform .25s ease;
+        }
+
+        .site-logo:hover {
+            transform: scale(1.03);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: .4rem .6rem;
+        }
+
+        .site-nav {
+            display: flex;
+            gap: 1.1rem;
+            align-items: center;
+        }
+
+        .site-nav a {
+            font-weight: 600;
+            font-size: .95rem;
+            letter-spacing: .02em;
+            text-transform: none;
+            color: var(--text);
+            padding: .5rem .75rem;
+            border-radius: 10px;
+            transition: background .2s ease;
+        }
+
+        .site-nav a:hover {
+            background: rgba(99, 102, 241, .08);
+            text-decoration: none;
+        }
+
+        .cta-nav {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: #fff !important;
+            padding: .55rem .9rem;
+            border-radius: 999px;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-nav:hover {
+            filter: brightness(1.05);
+        }
+
+        /* =====================
+     Hero
+     ===================== */
+        main {
+            margin: 0;
+        }
+
+        .hero {
+            padding: clamp(64px, 12vw, 140px) 0 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .headline {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+            margin: 0 0 1rem;
+            background: linear-gradient(90deg, var(--text), #111 30%, var(--accent-2) 65%, var(--accent-1));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subhead {
+            font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+            color: var(--muted);
+            max-width: 760px;
+            margin: 0 0 1.75rem;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .35rem .7rem;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, .12);
+            color: #2b2f77;
+            font-weight: 600;
+            font-size: .9rem;
+            margin-bottom: .9rem;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: .8rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            font-weight: 700;
+            border-radius: 14px;
+            padding: .9rem 1.15rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.05);
+            text-decoration: none;
+        }
+
+        .btn-ghost {
+            background: #fff;
+            color: var(--text);
+        }
+
+        .hero-aside {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .metric {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .metric strong {
+            font-size: 1.1rem;
+        }
+
+        .metric p {
+            margin: .35rem 0 0;
+            font-size: .95rem;
+            color: var(--muted);
+        }
+
+        /* =====================
+     Sections & cards
+     ===================== */
+        section {
+            padding: 56px 0;
+        }
+
+        section h2 {
+            font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+            letter-spacing: -0.01em;
+            margin: 0 0 .75rem;
+        }
+
+        .lead {
+            color: var(--muted);
+            max-width: 760px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.2rem;
+        }
+
+        .grid.g2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .grid.g3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .grid.g4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        @media (max-width: 900px) {
+
+            .grid.g2,
+            .grid.g3,
+            .grid.g4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px rgba(15, 23, 42, .12);
+        }
+
+        .card h3 {
+            margin: 0 0 .35rem;
+            font-size: 1.15rem;
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        /* timeline style (How it works) */
+        .steps {
+            position: relative;
+        }
+
+        .steps:before {
+            content: "";
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(var(--accent-2), var(--accent-1));
+            opacity: .25;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 58px;
+        }
+
+        .step+.step {
+            margin-top: 1rem;
+        }
+
+        .step .num {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            box-shadow: var(--shadow);
+        }
+
+        /* CTA band */
+        .cta-band {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            color: #fff;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .cta-band p {
+            color: #eef2ff;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-strong);
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        /* Mobile nav (overlay) */
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -493,125 +388,27 @@
 
             .site-nav {
                 position: fixed;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100vh;
-                background: #0a0f24;
+                top: 64px;
+                right: 0;
+                left: 0;
+                padding: 1rem;
                 flex-direction: column;
-                justify-content: center;
-                gap: 2rem;
-                transition: left 0.3s ease;
+                background: var(--bg-strong);
+                border-top: 1px solid var(--border);
+                transform: translateY(-120%);
+                transition: transform .2s ease;
                 z-index: 999;
             }
 
             .site-nav.active {
-                left: 0;
+                transform: translateY(0);
             }
 
             .site-nav a {
-                font-size: 1.2rem;
-                margin: 1rem 0;
-                padding: 1rem;
-                border-bottom: none;
                 width: 100%;
                 text-align: center;
-            }
-
-            .site-nav a:hover {
-                background: rgba(26, 188, 156, 0.1);
-                border-bottom: none;
-            }
-
-            .header-inner {
-                padding: 1rem;
-            }
-
-            .site-logo {
-                width: 140px;
-            }
-
-            main {
-                margin-top: 70px;
-                padding: 1rem;
-                margin-left: 1rem;
-                margin-right: 1rem;
-            }
-
-            .hero-section {
-                padding: 3rem 1rem;
-                margin-bottom: 2rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-            }
-
-            .cta-button {
-                width: 100%;
-                max-width: 300px;
-                padding: 1.2rem 2rem;
-            }
-
-            .process-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .use-case-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .service-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .feature-highlight {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-
-            .features-section {
-                padding: 2rem 1rem;
-            }
-
-            .cta-demo-section {
-                padding: 3rem 1rem;
-            }
-
-            section {
-                padding: 0 0.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-content h1 {
-                font-size: 2rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-
-            .cta-button {
-                font-size: 1rem;
-                padding: 1rem 1.5rem;
-            }
-
-            .process-step {
-                padding: 1.5rem;
-            }
-
-            .use-case-card {
-                padding: 1.5rem;
-            }
-
-            .service-card {
-                padding: 1.5rem;
+                padding: .9rem;
+                border-radius: 12px;
             }
         }
     </style>
@@ -623,7 +420,7 @@
     <header class="site-header">
         <div class="header-inner">
             <a href="/" class="logo-link">
-                <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo">
+                <img src="/image/icon/algomol_transparent.png" alt="AlgoMol Logo" class="site-logo">
             </a>
             <button class="menu-toggle" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
@@ -643,177 +440,220 @@
 
     <!-- ——— Main ——— -->
     <main>
-
-        <!-- ——— Hero ——— -->
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1>Automated Structure Elucidation, NMR‑First</h1>
-                <p class="hero-subtitle">We build AI that turns spectra into structures. NMR prediction is the core of
-                    our computer‑assisted elucidation workflow, delivering fast, accurate shifts and assignments that
-                    power end‑to‑end structure verification.</p>
-                <div class="hero-buttons">
-                    <a href="#products" class="cta-button primary">Explore Products</a>
-                    <a href="#book-demo" class="cta-button secondary">Book a Demo</a>
+        <section class="hero">
+            <div class="container">
+                <span class="badge"><i class="fa-solid fa-flask"></i> Automated structure elucidation • NMR-first</span>
+                <h1 class="headline">Turn spectra into structures—fast, accurate, production-ready.</h1>
+                <p class="subhead">AlgoMol builds AI that predicts chemical shifts and assists assignments so you can
+                    verify structures in minutes, not days. NMR prediction is the core engine powering our
+                    computer-assisted elucidation workflow.</p>
+                <div class="btn-row">
+                    <a href="#products" class="btn btn-primary"><i class="fa-solid fa-rocket"></i> Explore Products</a>
+                    <a href="#book-demo" class="btn btn-ghost"><i class="fa-regular fa-calendar"></i> Book a Demo</a>
+                </div>
+                <div class="hero-aside">
+                    <div class="metric"><strong>API & CLI</strong>
+                        <p>Batch jobs and CI/CD ready</p>
+                    </div>
+                    <div class="metric"><strong>Uncertainty built-in</strong>
+                        <p>Confidence intervals with every prediction</p>
+                    </div>
+                    <div class="metric"><strong>Secure deployment</strong>
+                        <p>Cloud, private cloud, or on-prem</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ——— Products ——— -->
-        <section id="products" class="features-section">
-            <h2>Our First SaaS Products (Liquid‑State NMR)</h2>
-
-            <div class="feature-highlight">
-                <div class="feature-content">
-                    <h3>AlgoMol Predictor</h3>
-                    <p>High‑accuracy chemical‑shift prediction for <strong>1H, 13C, 19F, 31P</strong> with calibrated
-                        uncertainty. Built for speed (seconds, not hours) and scale (batch via API/CLI).
-                        Physics‑informed ML captures subtle electronic effects while remaining production‑fast.</p>
+        <section id="products">
+            <div class="container">
+                <h2>Our Products (Liquid-State NMR)</h2>
+                <p class="lead">Start with high-accuracy predictions, then close the loop with assignment and
+                    verification. Built for scientists, designed for teams.</p>
+                <div class="grid g2" style="margin-top:1rem;">
+                    <div class="card">
+                        <h3>AlgoMol Predictor</h3>
+                        <p>High-accuracy chemical-shift prediction for <strong>1H, 13C, 19F, 31P</strong> with
+                            calibrated uncertainty. Seconds per molecule; scale via API or CLI. Physics-informed ML
+                            captures subtle electronic effects while staying production-fast.</p>
+                    </div>
+                    <div class="card">
+                        <h3>AlgoMol Elucidator</h3>
+                        <p>Computer-assisted structure elucidation from experimental spectra. Automated peak picking and
+                            assignment, candidate ranking against predicted shifts, and interactive review to move from
+                            spectra to structure with traceable confidence.</p>
+                    </div>
                 </div>
-                <div class="feature-content">
-                    <h3>AlgoMol Elucidator</h3>
-                    <p>Computer‑assisted structure elucidation from experimental spectra. Automated peak picking and
-                        assignment, candidate ranking/verification against predicted shifts, and interactive review to
-                        close the loop from spectra to structure.</p>
-                </div>
-            </div>
-
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>API & CLI Ready</h3>
-                    <p>Integrate into your pipeline with REST endpoints and command‑line tools for batch jobs and CI/CD
-                        workflows.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Uncertainty by Design</h3>
-                    <p>Every prediction ships with confidence intervals to guide decisions, triage edge cases, and
-                        prioritize review.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Secure by Default</h3>
-                    <p>Isolated projects, role‑based access, and optional on‑prem/private cloud deployment for sensitive
-                        data.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Roadmap: Beyond NMR</h3>
-                    <p>We are extending elucidation to additional characterization techniques (e.g., MS, IR) to provide
-                        multi‑modal evidence for structures.</p>
+                <div class="grid g4" style="margin-top:1rem;">
+                    <div class="card">
+                        <h3><i class="fa-solid fa-terminal"></i> API & CLI Ready</h3>
+                        <p>Integrate into LIMS/ELN and pipelines for screening and QC.</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fa-solid fa-shield"></i> Secure by Default</h3>
+                        <p>Isolated projects, role-based access, and flexible deployment.</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fa-solid fa-circle-notch"></i> Uncertainty by Design</h3>
+                        <p>Confidence intervals to guide decisions and triage edge cases.</p>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fa-solid fa-road"></i> Roadmap: Beyond NMR</h3>
+                        <p>Extending to MS and IR to provide multi-modal evidence.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ——— How It Works ——— -->
         <section id="how-it-works">
-            <h2>How AlgoMol Automates Structure Elucidation</h2>
-            <p>We combine physics‑informed machine learning with domain heuristics to turn spectra into structures. NMR
-                prediction is an essential building block of our computer‑assisted elucidation workflow.</p>
+            <div class="container">
+                <h2>Workflows: Predictor &amp; Elucidator</h2>
+                <p>Two focused flows tailor the experience to your task. Use <strong>Predictor</strong> when you need
+                    fast, high‑accuracy chemical shifts; use <strong>Elucidator</strong> when you want assignments and
+                    structure verification from experimental spectra.</p>
+                <!-- Predictor Workflow -->
+                <h3>AlgoMol Predictor — Shift Prediction</h3>
+                <div class="steps" style="margin-top:1rem;">
+                    <div class="step">
+                        <div class="num">1</div>
+                        <h3>Provide Structure</h3>
+                        <p>Upload SMILES/MOL/SDF (single or batch via API/CLI). Optionally specify solvent/reference.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="num">2</div>
+                        <h3>Physics‑Informed Inference</h3>
+                        <p>Graph features are embedded and a GNN predicts <strong>1H, 13C, 19F, 31P</strong> shifts with
+                            calibrated uncertainty.</p>
+                    </div>
+                    <div class="step">
+                        <div class="num">3</div>
+                        <h3>Calibrate &amp; Export</h3>
+                        <p>Optional calibration vs. reference standards; export JSON/CSV; integrate into LIMS/ELN or
+                            pipelines.</p>
+                    </div>
+                </div>
 
-            <div class="process-grid">
-                <div class="process-step">
-                    <div class="step-number">1</div>
-                    <h3>Upload Structure or Spectra</h3>
-                    <p>Submit SMILES/MOL/SDF, or ingest experimental 1D/2D NMR.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">2</div>
-                    <h3>Predict & Align</h3>
-                    <p>Fast NMR shift prediction, peak picking, and assignment driven by physics‑informed GNNs.</p>
-                </div>
-                <div class="process-step">
-                    <div class="step-number">3</div>
-                    <h3>Elucidate & Verify</h3>
-                    <p>Rank candidates, verify structures against spectra, and export reports with uncertainties.</p>
+                <!-- Elucidator Workflow -->
+                <h3>AlgoMol Elucidator — Assignment &amp; Verification</h3>
+                <div class="steps" style="margin-top:1rem;">
+                    <div class="step">
+                        <div class="num">1</div>
+                        <h3>Ingest Spectra</h3>
+                        <p>Load experimental 1D/2D NMR (e.g., 1H, 13C, HSQC, HMBC) and optional candidate structures.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="num">2</div>
+                        <h3>Peak Picking &amp; Alignment</h3>
+                        <p>Automated peak picking/denoising; align predicted vs. experimental axes with
+                            uncertainty‑aware matching.</p>
+                    </div>
+                    <div class="step">
+                        <div class="num">3</div>
+                        <h3>Assign &amp; Rank</h3>
+                        <p>Match peaks to atoms using Predictor outputs, score assignments with confidence, rank
+                            candidates, and export a traceable report.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ——— Key Features ——— -->
-        <section id="features" class="features-section">
-            <h2>Why AlgoMol</h2>
-
-            <div class="feature-highlight">
-                <div class="feature-content">
-                    <h3>NMR‑First, Elucidation‑Focused</h3>
-                    <p>NMR prediction is central to our approach: accurate shifts and assignments power end‑to‑end
-                        computer‑assisted structure elucidation and verification.</p>
+        <section id="features"
+            style="background: var(--bg-strong); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+            <div class="container">
+                <h2>Why AlgoMol</h2>
+                <div class="grid g2" style="margin-top:1rem;">
+                    <div class="card">
+                        <h3>NMR-First, Elucidation-Focused</h3>
+                        <p>Accurate shifts and assignments power end-to-end computer-assisted structure elucidation and
+                            verification.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Production-Grade SaaS</h3>
+                        <p>Scalable APIs, batch processing, audit trails, and deployment options that meet your security
+                            and throughput needs.</p>
+                    </div>
                 </div>
-                <div class="feature-content">
-                    <h3>Production‑Grade SaaS</h3>
-                    <p>Designed for teams: scalable APIs, batch processing, audit trails, and deployment options that
-                        meet your security and throughput needs.</p>
+                <div class="grid g4" style="margin-top:1rem;">
+                    <div class="card">
+                        <h3>Automated Peak Assignment</h3>
+                        <p>AI-assisted matching of predicted shifts to experimental spectra with confidence scoring.</p>
+                    </div>
+                    <div class="card">
+                        <h3>High-Accuracy Shift Prediction</h3>
+                        <p>Physics-informed models retain quantum-level fidelity with sub-second inference.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Reporting & Audit</h3>
+                        <p>Exportable reports with uncertainty, rationale, and versioned model metadata.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Seamless Integration</h3>
+                        <p>REST & CLI for LIMS, ELN, and workflow tools; easy scripting for libraries and QC.</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>Automated Peak Assignment</h3>
-                    <p>AI‑assisted matching of predicted shifts to experimental spectra with confidence scoring.</p>
+        <section id="use-cases">
+            <div class="container">
+                <h2>Accelerate Your Research Workflow</h2>
+                <div class="grid g3" style="margin-top:1rem;">
+                    <div class="card">
+                        <h3>Structure Elucidation</h3>
+                        <p>Validate proposed structures by comparing predicted vs. experimental NMR and rank candidates
+                            automatically.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Synthetic Planning</h3>
+                        <p>Predict NMR signatures of targets and intermediates to guide route design and monitor
+                            reaction progress.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Database Screening</h3>
+                        <p>Generate predictions for large libraries to triage candidates and anticipate spectral
+                            overlaps.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Method Development</h3>
+                        <p>Optimize experiments by predicting chemical shift ranges and multiplicities before
+                            acquisition.</p>
+                    </div>
+                    <div class="card">
+                        <h3>QC and Release</h3>
+                        <p>Scriptable checks with uncertainty to standardize acceptance criteria.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Education</h3>
+                        <p>Interactive assignments and visualizations for training and teaching NMR.</p>
+                    </div>
                 </div>
-                <div class="service-card">
-                    <h3>High‑Accuracy Shift Prediction</h3>
-                    <p>Physics‑informed models retain quantum‑level fidelity while delivering sub‑second inference.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Reporting & Audit</h3>
-                    <p>Exportable reports with uncertainty, rationale, and versioned model metadata for traceability.
+            </div>
+        </section>
+
+        <section id="book-demo">
+            <div class="container">
+                <div class="cta-band">
+                    <h2>Experience AlgoMol in Action</h2>
+                    <p>See AlgoMol Predictor and Elucidator on your molecules and spectra. We’ll demo prediction,
+                        assignment, and verification tailored to your use cases.</p>
+                    <p>
+                        <a href="mailto:lanl2vz@AlgoMol.com?subject=Book%20a%20Demo&body=Hi,%0D%0A%0D%0AI'd like to schedule a demo of AlgoMol's Predictor and Elucidator for liquid-state NMR.%0D%0A%0D%0AName:%0D%0AOrganization:%0D%0AResearch Focus:%0D%0APreferred Time:"
+                            class="btn btn-ghost" style="background:#fff;">Schedule Your Demo</a>
                     </p>
                 </div>
-                <div class="service-card">
-                    <h3>Seamless Integration</h3>
-                    <p>API/CLI for LIMS, ELN, and workflow tools; easy scripting for screening libraries and QC.</p>
-                </div>
             </div>
         </section>
 
-        <!-- ——— Use Cases ——— -->
-        <section id="use-cases">
-            <h2>Accelerate Your Research Workflow</h2>
-
-            <div class="use-case-grid">
-                <div class="use-case-card">
-                    <h3>Structure Elucidation</h3>
-                    <p>Rapidly validate proposed structures by comparing predicted vs. experimental NMR and rank
-                        candidates automatically.</p>
-                </div>
-                <div class="use-case-card">
-                    <h3>Synthetic Planning</h3>
-                    <p>Predict NMR signatures of target molecules and intermediates to guide synthesis route design and
-                        monitor reaction progress.</p>
-                </div>
-                <div class="use-case-card">
-                    <h3>Database Screening</h3>
-                    <p>Generate predictions for large libraries, triage candidates, and anticipate spectral overlaps or
-                        ambiguities.</p>
-                </div>
-                <div class="use-case-card">
-                    <h3>Method Development</h3>
-                    <p>Optimize NMR experiments by predicting chemical shift ranges and multiplicities before acquiring
-                        spectra.</p>
-                </div>
-            </div>
-        </section>
-
-
-
-        <!-- ——— Book-a-Demo ——— -->
-        <section id="book-demo" class="cta-demo-section">
-            <h2>Experience AlgoMol in Action</h2>
-            <p>See AlgoMol Predictor and Elucidator on your molecules and spectra. We’ll demo prediction, assignment,
-                and verification workflows tailored to your use cases.</p>
-            <a href="mailto:lanl2vz@AlgoMol.com?subject=Book%20a%20Demo&body=Hi,%0D%0A%0D%0AI'd like to schedule a demo of AlgoMol's Predictor and Elucidator for liquid‑state NMR.%0D%0A%0D%0AName:%0D%0AOrganization:%0D%0AResearch Focus:%0D%0APreferred Time:"
-                class="cta-button primary">Schedule Your Demo</a>
-        </section>
-
-        <!-- ——— Contact ——— -->
         <section id="contact">
-            <h2>Contact Us</h2>
-            <p>Email: <a href="mailto:lanl2vz@AlgoMol.com" style="color: #1abc9c;">lanl2vz@AlgoMol.com</a></p>
-            <p>
-                <a href="https://github.com/AlgoMol-dev" class="social-link" target="_blank">
-                    <i class="fab fa-github"></i> Visit us on GitHub
-                </a>
-            </p>
+            <div class="container">
+                <h2>Contact Us</h2>
+                <p>Email: <a href="mailto:lanl2vz@AlgoMol.com">lanl2vz@AlgoMol.com</a></p>
+                <p><a href="https://github.com/AlgoMol-dev" target="_blank"><i class="fab fa-github"></i> Visit us on
+                        GitHub</a></p>
+            </div>
         </section>
-
     </main>
 
     <!-- ——— Footer ——— -->
