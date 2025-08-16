@@ -83,7 +83,7 @@
         .header-inner {
             max-width: 1160px;
             margin: 0 auto;
-            padding: .75rem 1.25rem;
+            padding: .4rem 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -91,8 +91,8 @@
         }
 
         .site-logo {
-            width: 160px;
-            max-width: 40vw;
+            height: 70px;
+            width: auto;
             transition: transform .25s ease;
         }
 
@@ -117,11 +117,11 @@
 
         .site-nav a {
             font-weight: 600;
-            font-size: .95rem;
+            font-size: .9rem;
             letter-spacing: .02em;
             text-transform: none;
             color: var(--text);
-            padding: .5rem .75rem;
+            padding: .35rem .6rem;
             border-radius: 10px;
             transition: background .2s ease;
         }
@@ -134,7 +134,7 @@
         .cta-nav {
             background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
             color: #fff !important;
-            padding: .55rem .9rem;
+            padding: .45rem .8rem;
             border-radius: 999px;
             box-shadow: var(--shadow);
         }
@@ -386,9 +386,13 @@
                 display: block;
             }
 
+            .site-logo {
+                height: 24px;
+            }
+
             .site-nav {
                 position: fixed;
-                top: 64px;
+                top: 56px;
                 right: 0;
                 left: 0;
                 padding: 1rem;
@@ -420,7 +424,7 @@
     <header class="site-header">
         <div class="header-inner">
             <a href="/" class="logo-link">
-                <img src="/image/icon/algomol_transparent.png" alt="AlgoMol Logo" class="site-logo">
+                <img src="/image/icon/algomol_full_transparent.png" alt="AlgoMol Logo" class="site-logo">
             </a>
             <button class="menu-toggle" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
