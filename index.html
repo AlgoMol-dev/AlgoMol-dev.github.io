@@ -274,15 +274,24 @@
                 left: 0;
                 padding: 1rem;
                 flex-direction: column;
-                background: var(--bg-strong);
-                border-top: 1px solid var(--border);
-                transform: translateY(-120%);
-                transition: transform .2s ease;
+                background: transparent;
+                /* avoid white bar showing before open */
+                border-top: none;
+                transform: translateY(-10px);
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity .2s ease, transform .2s ease;
                 z-index: 999;
             }
 
             .site-nav.active {
                 transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                background: var(--bg-strong);
+                border-top: 1px solid var(--border);
             }
 
             .site-nav a {
