@@ -4,7 +4,7 @@
 <head>
     <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Careers — AlgoMol</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -21,6 +21,8 @@
             --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
             --accent-1: #10b981;
             --accent-2: #6366f1;
+            --safe-top: env(safe-area-inset-top);
+            --header-h: 64px;
         }
 
         * {
@@ -44,6 +46,8 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
+            font-size: 16px;
+            min-height: 100dvh;
         }
 
         a {
@@ -69,12 +73,15 @@
             background: var(--glass);
             backdrop-filter: saturate(120%) blur(10px);
             border-bottom: 1px solid var(--border);
+            -webkit-backdrop-filter: saturate(120%) blur(10px);
+            padding-top: var(--safe-top);
         }
 
         .header-inner {
             max-width: 1160px;
             margin: 0 auto;
-            padding: .4rem 1rem;
+            padding: calc(.4rem + var(--safe-top)) 1rem .4rem 1rem;
+            min-height: 64px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -82,7 +89,8 @@
         }
 
         .site-logo {
-            height: 70px;
+            height: 56px;
+            max-height: 56px;
             width: auto;
             transition: transform .25s ease;
         }
@@ -234,25 +242,35 @@
             }
 
             .site-logo {
-                height: 24px;
+                height: 32px;
+                max-height: 32px;
             }
 
             .site-nav {
                 position: fixed;
-                top: 56px;
+                top: var(--header-h);
                 right: 0;
                 left: 0;
                 padding: 1rem;
                 flex-direction: column;
-                background: var(--bg-strong);
-                border-top: 1px solid var(--border);
-                transform: translateY(-120%);
-                transition: transform .2s ease;
+                background: transparent;
+                /* avoid white bar showing before open */
+                border-top: none;
+                transform: translateY(-10px);
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity .2s ease, transform .2s ease;
                 z-index: 999;
             }
 
             .site-nav.active {
                 transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                background: var(--bg-strong);
+                border-top: 1px solid var(--border);
             }
 
             .site-nav a {
@@ -261,6 +279,14 @@
                 padding: .9rem;
                 border-radius: 12px;
             }
+
+            :root {
+                --header-h: 56px;
+            }
+        }
+
+        .site-nav {
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
@@ -277,7 +303,7 @@
             <nav class="site-nav">
                 <a href="/careers.html" class="pill-hiring">We’re hiring</a>
                 <a href="/algomol-core.html">Library</a>
-                <a href="#contact">Contact</a>
+                <a href="/#contact">Contact</a>
             </nav>
         </div>
     </header>
@@ -320,6 +346,17 @@
     </footer>
 
     <script>
+        // Compute and expose header height for iOS Safari safe areas
+        const headerEl = document.querySelector('header.site-header');
+        function setHeaderHeightVar() {
+            if (!headerEl) return;
+            const h = headerEl.offsetHeight;
+            document.documentElement.style.setProperty('--header-h', h + 'px');
+        }
+        window.addEventListener('load', setHeaderHeightVar);
+        window.addEventListener('resize', setHeaderHeightVar);
+        setHeaderHeightVar();
+
         const menuToggle = document.querySelector('.menu-toggle');
         const siteNav = document.querySelector('.site-nav');
         if (menuToggle) {
