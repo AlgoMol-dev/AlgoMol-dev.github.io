@@ -4,7 +4,7 @@
 <head>
     <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AlgoMol — AI for Chemistry</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -45,6 +45,8 @@
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
             font-size: 16px;
+            min-height: 100dvh;
+            /* ensure background covers iOS dynamic viewport */
         }
 
         a {
@@ -69,6 +71,12 @@
             z-index: 1000;
             background: var(--glass);
             backdrop-filter: saturate(120%) blur(10px);
+            -webkit-backdrop-filter: saturate(120%) blur(10px);
+            /* iOS Safari */
+            padding-top: constant(safe-area-inset-top);
+            /* iOS < 13 */
+            padding-top: env(safe-area-inset-top);
+            /* iOS >= 11.2 */
             border-bottom: 1px solid var(--border);
         }
 
@@ -696,8 +704,6 @@
     <footer>
         <p>&copy; 2025 AlgoMol LLC. All rights reserved.</p>
     </footer>
-
-    </main>
 
     <script>
         const menuToggle = document.querySelector('.menu-toggle');
