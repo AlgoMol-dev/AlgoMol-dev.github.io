@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers — AlgoMol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #f7f8fb;
+            --bg-strong: #ffffff;
+            --text: #0b1220;
+            --muted: #586174;
+            --border: rgba(11, 18, 32, 0.08);
+            --card: rgba(255, 255, 255, 0.65);
+            --glass: rgba(255, 255, 255, 0.6);
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            --accent-1: #10b981;
+            --accent-2: #6366f1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            color: var(--text);
+            background:
+                radial-gradient(1200px 600px at 80% -10%, rgba(99, 102, 241, .15), transparent 60%),
+                radial-gradient(1000px 600px at -10% 20%, rgba(16, 185, 129, .18), transparent 60%),
+                var(--bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 1.25rem;
+        }
+
+        /* Header */
+        header.site-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: saturate(120%) blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: .4rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .site-logo {
+            height: 70px;
+            width: auto;
+            transition: transform .25s ease;
+        }
+
+        .site-logo:hover {
+            transform: scale(1.03);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: .4rem .6rem;
+        }
+
+        .site-nav {
+            display: flex;
+            gap: 1.1rem;
+            align-items: center;
+        }
+
+        .site-nav a {
+            font-weight: 600;
+            font-size: .9rem;
+            letter-spacing: .02em;
+            color: var(--text);
+            padding: .35rem .6rem;
+            border-radius: 10px;
+            transition: background .2s ease;
+        }
+
+        .site-nav a:hover {
+            background: rgba(99, 102, 241, .08);
+            text-decoration: none;
+        }
+
+        .cta-nav {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: #fff !important;
+            padding: .45rem .8rem;
+            border-radius: 999px;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-nav:hover {
+            filter: brightness(1.05);
+        }
+
+        .pill-hiring {
+            background: rgba(99, 102, 241, .12);
+            color: #2b2f77;
+            padding: .35rem .7rem;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .hero {
+            padding: clamp(56px, 10vw, 120px) 0 40px;
+        }
+
+        .headline {
+            font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+            font-weight: 800;
+            line-height: 1.06;
+            letter-spacing: -0.02em;
+            margin: 0 0 .75rem;
+            background: linear-gradient(90deg, var(--text), #111 30%, var(--accent-2) 65%, var(--accent-1));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subhead {
+            font-size: clamp(1rem, 2.2vw, 1.2rem);
+            color: var(--muted);
+            max-width: 760px;
+            margin: 0 0 1.25rem;
+            letter-spacing: .02em;
+        }
+
+        .roles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+        }
+
+        .card h3 {
+            margin: 0 0 .25rem;
+            font-size: 1.15rem;
+        }
+
+        .meta {
+            color: var(--muted);
+            font-size: .95rem;
+            margin-bottom: .6rem;
+        }
+
+        .apply-row {
+            margin-top: .8rem;
+            display: flex;
+            gap: .6rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 700;
+            border-radius: 14px;
+            padding: .7rem .95rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            color: #fff;
+            border: none;
+        }
+
+        .btn-ghost {
+            background: #fff;
+            color: var(--text);
+        }
+
+        footer {
+            background: var(--bg-strong);
+            border-top: 0.5px solid var(--border);
+            color: var(--muted);
+            text-align: center;
+            padding: 0.1rem 0.1rem 0.1rem 0.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .site-logo {
+                height: 24px;
+            }
+
+            .site-nav {
+                position: fixed;
+                top: 56px;
+                right: 0;
+                left: 0;
+                padding: 1rem;
+                flex-direction: column;
+                background: var(--bg-strong);
+                border-top: 1px solid var(--border);
+                transform: translateY(-120%);
+                transition: transform .2s ease;
+                z-index: 999;
+            }
+
+            .site-nav.active {
+                transform: translateY(0);
+            }
+
+            .site-nav a {
+                width: 100%;
+                text-align: center;
+                padding: .9rem;
+                border-radius: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="logo-link">
+                <img src="/image/icon/algomol_full_transparent.png" alt="AlgoMol Logo" class="site-logo">
+            </a>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="site-nav">
+                <a href="/careers.html" class="pill-hiring">We’re hiring</a>
+                <a href="/algomol-core.html">Library</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 class="headline">Join AlgoMol</h1>
+                <p class="subhead">Build AI for Chemistry — small team, big problems.</p>
+
+                <div class="roles">
+                    <div class="card">
+                        <h3>Machine Learning Engineer</h3>
+                        <div class="meta">Full‑time • Remote/Hybrid</div>
+                        <div class="meta">PyTorch • Graphs • GenAI</div>
+                        <div class="apply-row">
+                            <a class="btn btn-primary"
+                                href="mailto:dev@algomol.com?subject=ML%20Engineer%20(Full-time)%20Application&body=Hi%20AlgoMol,%0D%0A%0D%0AI'm%20interested%20in%20the%20ML%20Engineer%20(Full-time)%20role.%20Resume%20and%20links%20attached.">apply
+                                via email</a>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Machine Learning Engineer Intern</h3>
+                        <div class="meta">Internship • Remote/Hybrid</div>
+                        <div class="meta">Research • Prototyping</div>
+                        <div class="apply-row">
+                            <a class="btn btn-primary"
+                                href="mailto:dev@algomol.com?subject=ML%20Engineer%20Intern%20Application&body=Hi%20AlgoMol,%0D%0A%0D%0AI'm%20interested%20in%20the%20ML%20Engineer%20Intern%20role.%20Resume%20and%20links%20attached.">apply
+                                via email</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 AlgoMol LLC. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const siteNav = document.querySelector('.site-nav');
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                siteNav.classList.toggle('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+        }
+        document.querySelectorAll('.site-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                siteNav.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-times');
+            });
+        });
+    </script>
+</body>
+
+</html>

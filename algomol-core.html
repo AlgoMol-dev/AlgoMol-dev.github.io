@@ -10,7 +10,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
     <style>
         /* ——— Base styles ——— */
         body {
@@ -577,6 +577,87 @@
                 font-size: 0.75rem;
             }
         }
+
+        /* === Light theme overrides to match index === */
+        :root {
+            --bg: #f7f8fb; --bg-strong: #ffffff; --text: #0b1220; --muted: #586174; --border: rgba(11, 18, 32, 0.08);
+            --card: rgba(255, 255, 255, 0.65); --glass: rgba(255, 255, 255, 0.6); --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            --accent-1: #10b981; --accent-2: #6366f1;
+        }
+
+        body {
+            color: var(--text) !important;
+            background:
+                radial-gradient(1200px 600px at 80% -10%, rgba(99, 102, 241, .15), transparent 60%),
+                radial-gradient(1000px 600px at -10% 20%, rgba(16, 185, 129, .18), transparent 60%),
+                var(--bg) !important;
+        }
+
+        header.site-header {
+            background: var(--glass) !important;
+            border-bottom: 1px solid var(--border) !important;
+        }
+        header { background: transparent !important; color: inherit !important; text-align: initial !important; padding: 0 !important; }
+
+        .menu-toggle { color: var(--text) !important; }
+        .header-inner { max-width: 1160px !important; padding: .4rem 1rem !important; display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 1rem !important; }
+        .site-logo { height: 70px !important; width: auto !important; filter: none !important; }
+        .site-logo:hover { transform: scale(1.03) !important; filter: none !important; }
+
+        .site-nav { gap: 1.1rem !important; }
+        .site-nav a, nav a {
+            color: var(--text) !important;
+            text-transform: none !important;
+            letter-spacing: .02em !important;
+            font-weight: 600 !important;
+            font-size: .9rem !important;
+            padding: .35rem .6rem !important;
+            border-radius: 10px !important;
+            transition: background .2s ease !important;
+        }
+        .site-nav a:hover, nav a:hover { background: rgba(99, 102, 241, .08) !important; border-bottom: none !important; }
+        .cta-nav { background: linear-gradient(90deg, var(--accent-1), var(--accent-2)) !important; color: #fff !important; padding: .45rem .8rem !important; border-radius: 999px !important; box-shadow: var(--shadow) !important; }
+        .pill-hiring { background: rgba(99,102,241,.12); color: #2b2f77; padding: .35rem .7rem; border-radius: 999px; font-weight: 700; }
+
+        main { background: transparent !important; box-shadow: none !important; border-radius: 0 !important; margin-top: 0 !important; }
+
+        .hero-section {
+            background: var(--card) !important; border: 1px solid var(--border) !important; box-shadow: var(--shadow) !important; color: var(--text) !important;
+        }
+        .hero-content h1 { background: none !important; color: var(--text) !important; text-shadow: none !important; }
+        .hero-subtitle { color: var(--muted) !important; text-shadow: none !important; }
+        .cta-button { border-radius: 14px; font-weight: 700; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        .cta-button.primary { background: linear-gradient(90deg, var(--accent-1), var(--accent-2)); color: #fff; border: none; }
+        .cta-button.secondary { background: #fff; color: var(--text); border-color: var(--border); }
+
+        .feature-card { background: var(--card) !important; border: 1px solid var(--border) !important; }
+        .feature-card p { color: var(--muted) !important; }
+
+        .code-section { background: var(--card) !important; border: 1px solid var(--border) !important; }
+        pre { background: #f8fafc !important; color: var(--text) !important; border: 1px solid var(--border) !important; }
+        code { background: #eef2ff !important; color: #2b2f77 !important; }
+
+        .install-card { background: var(--card) !important; border: 1px solid var(--border) !important; }
+        .requirements-list { background: rgba(99,102,241,0.06) !important; border: 1px solid var(--border) !important; }
+        .requirements-list li { color: var(--muted) !important; }
+
+        /* Headings match index color */
+        section h2, section h3, section h4 { color: var(--text) !important; }
+
+        footer { background: var(--bg-strong) !important; border-top: 1px solid var(--border) !important; color: var(--muted) !important; }
+        .footer-social a { color: var(--text) !important; }
+
+        /* Links */
+        a { color: var(--text) !important; }
+        a:hover { text-decoration: underline; }
+
+        /* Mobile nav override */
+        @media (max-width: 768px) {
+            .site-nav { position: fixed !important; top: 56px !important; right: 0 !important; left: 0 !important; padding: 1rem !important; flex-direction: column !important; background: var(--bg-strong) !important; border-top: 1px solid var(--border) !important; transform: translateY(-120%) !important; transition: transform .2s ease !important; z-index: 999 !important; }
+            .site-nav.active { transform: translateY(0) !important; left: 0 !important; }
+            .site-nav a { width: 100% !important; text-align: center !important; padding: .9rem !important; border-radius: 12px !important; }
+            .site-logo { height: 24px !important; width: auto !important; }
+        }
     </style>
 </head>
 
@@ -586,19 +667,15 @@
     <header class="site-header">
         <div class="header-inner">
             <a href="/" class="logo-link">
-                <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo">
+                <img src="/image/icon/algomol_full_transparent.png" alt="AlgoMol Logo" class="site-logo">
             </a>
             <button class="menu-toggle" aria-label="Toggle menu">
                 <i class="fas fa-bars"></i>
             </button>
             <nav class="site-nav">
-                <a href="/#services">Solutions</a>
+                <a href="/careers.html" class="pill-hiring">We’re hiring</a>
                 <a href="/algomol-core.html">Library</a>
-                <a href="/#team">Team</a>
-                <a href="/#news">News</a>
-                <a href="/#careers">Careers</a>
-                <a href="/#contact">Contact</a>
-                <a href="/#book-demo" class="cta-nav">Book&nbsp;a&nbsp;Demo</a>
+                <a href="#contact">Contact</a>
             </nav>
         </div>
     </header>
@@ -837,7 +914,7 @@ int main() {
             </div>
 
             <p style="margin-top: 2rem;">For questions and support, please contact: <a
-                    href="mailto:lanl2vz@algomol.com">lanl2vz@algomol.com</a></p>
+                    href="mailto:dev@algomol.com">dev@algomol.com</a></p>
 
             <div style="text-align: center; margin-top: 2rem;">
                 <a href="https://fury.co/f/partner">
