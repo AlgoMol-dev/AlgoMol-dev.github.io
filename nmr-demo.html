@@ -718,54 +718,139 @@
             `;
         }
 
+        // —— NMR drawing helpers (Voigt line shapes & multiplets) ——
+        function pascalRow(n) {
+            const row = [1];
+            for (let k = 1; k <= n; k++) row[k] = row[k - 1] * (n - k + 1) / k;
+            return row; // length n+1
+        }
+
+        function pseudoVoigt(x_ppm, x0_ppm, fwhmL_ppm, fwhmG_ppm, etaL) {
+            const dx = x_ppm - x0_ppm;
+            // Lorentzian (area-normalized)
+            const gamma = fwhmL_ppm / 2; // HWHM
+            const lor = (1 / Math.PI) * (gamma / (dx * dx + gamma * gamma));
+            // Gaussian (area-normalized)
+            const sigma = fwhmG_ppm / (2 * Math.sqrt(2 * Math.log(2)));
+            const gauss = (1 / (sigma * Math.sqrt(2 * Math.PI))) * Math.exp(-0.5 * (dx / sigma) * (dx / sigma));
+            return etaL * lor + (1 - etaL) * gauss;
+        }
+
+        function hzToPpm(hz, nu0_MHz) {
+            // 1 ppm = nu0(Hz)/1e6;  Δppm = ΔHz / nu0(MHz)
+            return hz / nu0_MHz;
+        }
+
+        function createMultiplet(center_ppm, nNeighbors, J_Hz, integralH, fwhmL_Hz, fwhmG_Hz, etaL, nu0_MHz) {
+            const n = nNeighbors; // n+1 lines
+            const intens = pascalRow(n);
+            const sumI = intens.reduce((a, b) => a + b, 0);
+            const scale = integralH / sumI; // area per unit of Pascal weight
+            const fwhmL_ppm = hzToPpm(fwhmL_Hz, nu0_MHz);
+            const fwhmG_ppm = hzToPpm(fwhmG_Hz, nu0_MHz);
+            const lines = [];
+            for (let k = 0; k <= n; k++) {
+                const offset_Hz = (k - n / 2) * J_Hz; // equally spaced by J
+                const ppm = center_ppm + hzToPpm(offset_Hz, nu0_MHz);
+                lines.push({ ppm, area: intens[k] * scale, fL: fwhmL_ppm, fG: fwhmG_ppm, eta: etaL });
+            }
+            return lines;
+        }
+
+        function createSinglet(center_ppm, areaH, fwhmL_Hz, fwhmG_Hz, etaL, nu0_MHz) {
+            return [{
+                ppm: center_ppm,
+                area: areaH,
+                fL: hzToPpm(fwhmL_Hz, nu0_MHz),
+                fG: hzToPpm(fwhmG_Hz, nu0_MHz),
+                eta: etaL
+            }];
+        }
+
+        function synthesizeSpectrum(lines, ppmMin, ppmMax, nu0_MHz, nPts = 1600) {
+            // x grid (ppm) decreasing left->right as in conventional NMR (high ppm on left)
+            const x = new Float64Array(nPts);
+            const y = new Float64Array(nPts);
+            for (let i = 0; i < nPts; i++) x[i] = ppmMax - (i * (ppmMax - ppmMin)) / (nPts - 1);
+            for (let i = 0; i < nPts; i++) {
+                let acc = 0;
+                const xi = x[i];
+                for (const L of lines) acc += L.area * pseudoVoigt(xi, L.ppm, L.fL, L.fG, L.eta);
+                y[i] = acc;
+            }
+            // normalize to 1.0 max
+            const yMax = Math.max(...y);
+            if (yMax > 0) for (let i = 0; i < nPts; i++) y[i] /= yMax;
+            return { x, y };
+        }
+
         function drawSpectrum() {
             const canvas = document.getElementById('spectrum-canvas');
             const ctx = canvas.getContext('2d');
-
-            // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Set up styling
-            ctx.strokeStyle = '#1abc9c';
-            ctx.lineWidth = 2;
-            ctx.fillStyle = '#1abc9c';
+            // Plot layout
+            const left = 60, right = canvas.width - 20;
+            const top = 30, bottom = 250;
+            const w = right - left, h = bottom - top;
 
-            // Draw axes
-            ctx.beginPath();
-            ctx.moveTo(50, 50);
-            ctx.lineTo(50, 250);
-            ctx.lineTo(450, 250);
-            ctx.stroke();
+            // Axis limits (ppm)
+            const ppmMin = 0.0, ppmMax = 10.0; // display 0..10 ppm with 10 at left
+            const nu0_MHz = 400; // spectrometer frequency for 1H
 
-            // Draw sample peaks (ethanol)
-            const peaks = [
-                { x: 380, height: 100 }, // 1.25 ppm
-                { x: 200, height: 80 },  // 3.65 ppm
-                { x: 120, height: 40 }   // 4.90 ppm
+            // Ethanol components (typical values)
+            const J = 24.0; // Hz, CH3–CH2 coupling (increased for clearer multiplet separation)
+            const lines = [
+                // CH3 triplet at 1.25 ppm, integral 3H, broader for visibility
+                ...createMultiplet(1.25, 2, J, 3, 5.8, 5.0, 0.7, nu0_MHz),
+                // CH2 quartet at 3.65 ppm, integral 2H, broader for visibility
+                ...createMultiplet(3.65, 3, J, 2, 5.8, 5.0, 0.7, nu0_MHz),
+                // OH singlet around 4.90 ppm, broader and more Gaussian (exchange)
+                ...createSinglet(4.90, 1, 1.2, 5.0, 0.2, nu0_MHz)
             ];
 
-            peaks.forEach(peak => {
-                ctx.beginPath();
-                ctx.moveTo(peak.x, 250);
-                ctx.lineTo(peak.x, 250 - peak.height);
-                ctx.stroke();
-            });
+            const { x, y } = synthesizeSpectrum(lines, ppmMin, ppmMax, nu0_MHz, 1600);
 
-            // Add labels
+            // Axes
+            ctx.strokeStyle = '#888';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(left, top);
+            ctx.lineTo(left, bottom);
+            ctx.lineTo(right, bottom);
+            ctx.stroke();
+
+            // Ticks & labels (ppm decreasing left->right)
             ctx.fillStyle = '#fff';
             ctx.font = '12px Inter';
             ctx.textAlign = 'center';
-            ctx.fillText('10', 60, 270);
-            ctx.fillText('5', 250, 270);
-            ctx.fillText('0', 440, 270);
-
+            for (let ppm = 0; ppm <= 10; ppm += 1) {
+                const xpx = left + ((ppmMax - ppm) / (ppmMax - ppmMin)) * w;
+                ctx.beginPath();
+                ctx.moveTo(xpx, bottom);
+                ctx.lineTo(xpx, bottom + 5);
+                ctx.strokeStyle = '#555';
+                ctx.stroke();
+                if (ppm % 5 === 0) ctx.fillText(String(ppm), xpx, bottom + 18);
+            }
+            // Axis titles
             ctx.save();
-            ctx.translate(20, 150);
+            ctx.translate(left - 35, top + h / 2);
             ctx.rotate(-Math.PI / 2);
             ctx.fillText('Intensity', 0, 0);
             ctx.restore();
+            ctx.fillText('Chemical Shift (ppm)', left + w / 2, bottom + 35);
 
-            ctx.fillText('Chemical Shift (ppm)', 250, 290);
+            // Spectrum trace
+            ctx.strokeStyle = '#1abc9c';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 0; i < x.length; i++) {
+                const xpx = left + ((ppmMax - x[i]) / (ppmMax - ppmMin)) * w;
+                const ypx = bottom - y[i] * (h - 5);
+                if (i === 0) ctx.moveTo(xpx, ypx); else ctx.lineTo(xpx, ypx);
+            }
+            ctx.stroke();
         }
 
         // Download functionality
