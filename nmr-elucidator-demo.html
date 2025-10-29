@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="shortcut icon" type="image/x-icon" href="/image/icon/algomol_transparent.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMR Structure Elucidator - AlgoMol Demo</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    /* ——— Base styles ——— */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: #e0e0e0;
+      scroll-behavior: smooth;
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ——— Header ——— */
+    .site-header {
+      background: #0a0f24;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      padding: 1rem 0;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-logo {
+      width: 160px;
+      max-width: 40vw;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 127, .4));
+      transition: filter .3s, transform .3s;
+    }
+
+    .site-logo:hover {
+      filter: drop-shadow(0 0 20px rgba(0, 255, 127, .7));
+      transform: scale(1.04);
+    }
+
+    /* ——— Main Content ——— */
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .demo-container {
+      background: #1c1c1c;
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .demo-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .demo-header h1 {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+      line-height: 1.2;
+    }
+
+    .demo-subtitle {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: #b0b0b0;
+      margin-bottom: 2rem;
+      max-width: 720px;
+      margin-inline: auto;
+      line-height: 1.6;
+    }
+
+    .demo-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    /* ——— Input Section ——— */
+    .input-section {
+      background: rgba(26, 188, 156, .05);
+      border-radius: 12px;
+      border: 1px solid rgba(26, 188, 156, .2);
+      padding: 2rem;
+    }
+
+    .input-section h2 {
+      font-size: 1.5rem;
+      color: #1abc9c;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .method-tabs {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      padding: .75rem 1.25rem;
+      border: 2px solid #1abc9c;
+      background: transparent;
+      color: #1abc9c;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all .3s ease;
+      font-family: inherit;
+    }
+
+    .tab-button.active {
+      background: #1abc9c;
+      color: #000;
+    }
+
+    .tab-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 188, 156, .3);
+    }
+
+    .input-content {
+      display: none;
+    }
+
+    .input-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: .5rem;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: .75rem;
+      border: 2px solid rgba(255, 255, 255, .2);
+      border-radius: 8px;
+      background: rgba(0, 0, 0, .3);
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9rem;
+      transition: border-color .3s ease;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: #1abc9c;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 140px;
+    }
+
+    .file-upload {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .file-upload-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-upload-label {
+      display: block;
+      padding: 2rem;
+      border: 2px dashed #1abc9c;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .3s ease;
+      background: rgba(26, 188, 156, .05);
+    }
+
+    .file-upload-label:hover {
+      background: rgba(26, 188, 156, .1);
+      border-color: #16a085;
+    }
+
+    .file-upload-label i {
+      font-size: 2rem;
+      color: #1abc9c;
+      margin-bottom: 1rem;
+    }
+
+    .file-upload-text {
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .file-upload-hint {
+      color: #b0b0b0;
+      font-size: .9rem;
+      margin-top: .5rem;
+    }
+
+    .calculate-button {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: #1abc9c;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all .3s ease;
+      margin-top: 1rem;
+    }
+
+    .calculate-button:hover {
+      background: #16a085;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(26, 188, 156, .4);
+    }
+
+    .calculate-button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ——— Results Section ——— */
+    .results-section {
+      background: rgba(255, 255, 255, .05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      padding: 2rem;
+    }
+
+    .results-section h2 {
+      font-size: 1.5rem;
+      color: #1abc9c;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .results-placeholder {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #8a8a8a;
+    }
+
+    .results-placeholder i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #555;
+    }
+
+    .loading-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #1abc9c;
+    }
+
+    .loading-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .candidates-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .candidate-card {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, .3);
+      border: 1px solid rgba(255, 255, 255, .12);
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .candidate-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .35);
+      border-color: rgba(26, 188, 156, .35);
+    }
+
+    .candidate-card.active {
+      border-color: #1abc9c;
+      box-shadow: 0 0 0 2px rgba(26, 188, 156, .25) inset;
+    }
+
+    .score-bar {
+      width: 160px;
+      height: 8px;
+      background: #222;
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: #1abc9c;
+    }
+
+    .badge {
+      font-size: .75rem;
+      padding: .2rem .5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, .2);
+      color: #bfbfbf;
+    }
+
+    .details-panel {
+      background: rgba(0, 0, 0, .3);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .structure-canvas {
+      width: 100%;
+      height: 220px;
+      background: #111;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      font-size: .95rem;
+      margin-bottom: 1rem;
+    }
+
+    .results-data {
+      background: rgba(0, 0, 0, .3);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9rem;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: .5rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .data-table th {
+      color: #1abc9c;
+      font-weight: 600;
+    }
+
+    .actions-row {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .download-button,
+    .copy-button,
+    .rerun-button {
+      padding: .75rem 1.25rem;
+      background: rgba(26, 188, 156, .2);
+      color: #1abc9c;
+      border: 2px solid #1abc9c;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all .3s ease;
+    }
+
+    .download-button:hover,
+    .copy-button:hover,
+    .rerun-button:hover {
+      background: #1abc9c;
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    /* ——— Info Section ——— */
+    .info-section {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: rgba(26, 188, 156, .05);
+      border-radius: 12px;
+      border: 1px solid rgba(26, 188, 156, .2);
+    }
+
+    .info-section h3 {
+      color: #1abc9c;
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .info-item {
+      padding: 1rem;
+      background: rgba(0, 0, 0, .3);
+      border-radius: 8px;
+    }
+
+    .info-item h4 {
+      color: #fff;
+      margin-bottom: .5rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .info-item p {
+      color: #b0b0b0;
+      font-size: .9rem;
+      margin: 0;
+    }
+
+    /* ——— Responsive ——— */
+    @media (max-width: 900px) {
+      .demo-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .demo-container {
+        padding: 2rem 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .input-section,
+      .results-section {
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <img src="/image/icon/algomol_fulllogo_transparent.png" alt="AlgoMol Logo" class="site-logo" />
+    </div>
+  </header>
+
+  <main>
+    <div class="demo-container">
+      <div class="demo-header">
+        <h1>¹H NMR Structure Elucidator</h1>
+        <p class="demo-subtitle">
+          Provide experimental ¹H NMR peak data (CSV/JSON) or upload a JCAMP-DX file. AlgoMol Elucidator suggests
+          ranked candidate structures and interactive atom–peak assignments using ML + rules-based reasoning.
+        </p>
+      </div>
+
+      <div class="demo-content">
+        <!-- Input Section -->
+        <section class="input-section">
+          <h2><i class="fas fa-upload"></i> Input Spectrum</h2>
+
+          <div class="method-tabs">
+            <button class="tab-button active" data-tab="csv">Peaks (CSV)</button>
+            <button class="tab-button" data-tab="jcamp">JCAMP-DX</button>
+            <button class="tab-button" data-tab="json">JSON</button>
+            <button class="tab-button" data-tab="bruker">Bruker (FID/SER)</button>
+            <button class="tab-button" data-tab="varian">Varian (acqu/proc)</button>
+          </div>
+
+          <div id="csv-input" class="input-content active">
+            <div class="form-group">
+              <label class="form-label">CSV Peaks (shift,multiplicity,integral)</label>
+              <textarea id="csv-field" class="form-textarea" spellcheck="false">shift,multiplicity,integral
+1.25,t,3
+3.65,q,2
+4.90,s,1</textarea>
+            </div>
+          </div>
+
+          <div id="jcamp-input" class="input-content">
+            <div class="form-group">
+              <div class="file-upload">
+                <input type="file" class="file-upload-input" accept=".dx,.jdx" id="jcamp-file" />
+                <label for="jcamp-file" class="file-upload-label">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <div class="file-upload-text">Click to upload JCAMP-DX</div>
+                  <div class="file-upload-hint">Supports .dx and .jdx formats</div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div id="json-input" class="input-content">
+            <div class="form-group">
+              <label class="form-label">JSON Peaks</label>
+              <textarea id="json-field" class="form-textarea" placeholder='[{"shift":1.25,"mult":"t","int":3}]'
+                spellcheck="false"></textarea>
+            </div>
+          </div>
+
+          <div id="bruker-input" class="input-content">
+            <div class="form-group">
+              <div class="file-upload">
+                <input type="file" class="file-upload-input" id="bruker-dir" webkitdirectory directory multiple />
+                <label for="bruker-dir" class="file-upload-label">
+                  <i class="fas fa-folder-open"></i>
+                  <div class="file-upload-text">Select Bruker dataset folder</div>
+                  <div class="file-upload-hint">Include required files: <code>fid</code> or <code>ser</code>, plus
+                    <code>acqus</code>/<code>procs</code> (and <code>acqu2s</code> for 2D)</div>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="file-upload">
+                <input type="file" class="file-upload-input" accept=".zip" id="bruker-zip" />
+                <label for="bruker-zip" class="file-upload-label">
+                  <i class="fas fa-file-archive"></i>
+                  <div class="file-upload-text">…or upload Bruker dataset as .zip</div>
+                  <div class="file-upload-hint">Zip the whole experiment directory (e.g., <code>1/</code>)</div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div id="varian-input" class="input-content">
+            <div class="form-group">
+              <div class="file-upload">
+                <input type="file" class="file-upload-input" id="varian-dir" webkitdirectory directory multiple />
+                <label for="varian-dir" class="file-upload-label">
+                  <i class="fas fa-folder-open"></i>
+                  <div class="file-upload-text">Select Varian/Agilent dataset folder</div>
+                  <div class="file-upload-hint">Include files like <code>fid</code>, <code>procpar</code> (and processed
+                    <code>phasefile</code>/<code>text</code> if available)</div>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="file-upload">
+                <input type="file" class="file-upload-input" accept=".zip" id="varian-zip" />
+                <label for="varian-zip" class="file-upload-label">
+                  <i class="fas fa-file-archive"></i>
+                  <div class="file-upload-text">…or upload Varian dataset as .zip</div>
+                  <div class="file-upload-hint">Zip the experiment folder</div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top:1rem;">
+            <label class="form-label">Optional Constraints</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:.75rem;">
+              <input id="formula-field" class="form-input" placeholder="Molecular formula (e.g., C2H6O)" />
+              <input id="fragments-field" class="form-input"
+                placeholder="Fragments/SMARTS (comma‑separated, e.g., O, c1ccccc1)" />
+            </div>
+          </div>
+
+          <button id="elucidate-btn" class="calculate-button">
+            <i class="fas fa-search"></i> Elucidate Structure
+          </button>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+          <h2><i class="fas fa-flask"></i> Results</h2>
+
+          <div id="results-placeholder" class="results-placeholder">
+            <i class="fas fa-microscope"></i>
+            <p>Paste/upload peaks and click “Elucidate Structure” to see candidates and assignments.</p>
+          </div>
+
+          <div id="loading-state" class="loading-state" style="display:none;">
+            <i class="fas fa-spinner"></i>
+            <p>Analyzing spectrum and searching candidates...</p>
+            <p style="font-size:.9rem; color:#8a8a8a;">This demo uses mock data (3–5 seconds)</p>
+          </div>
+
+          <div id="results-display" style="display:none;">
+            <div class="candidates-grid" id="candidates-grid">
+              <!-- Candidate cards injected here -->
+            </div>
+
+            <div class="details-panel">
+              <div class="structure-canvas" id="structure-canvas">
+                <canvas id="structure-canvas-el" width="600" height="220"></canvas>
+              </div>
+
+              <div class="results-data">
+                <h4 style="color:#1abc9c; margin-bottom:.6rem;">Atom–Peak Assignment (Selected Candidate)</h4>
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Atom</th>
+                      <th>Pred (ppm)</th>
+                      <th>Obs (ppm)</th>
+                      <th>Mult</th>
+                      <th>Int</th>
+                      <th>|Δ| (ppm)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="assignment-table">
+                    <!-- Rows injected here -->
+                  </tbody>
+                </table>
+                <div style="margin-top:.6rem; color:#b0b0b0; font-size:.9rem;">
+                  <span id="fit-metrics" class="badge">RMSD: —</span>
+                  <span id="penalty-metrics" class="badge">Penalty: —</span>
+                </div>
+              </div>
+
+              <div class="actions-row">
+                <button id="download-btn" class="download-button"><i class="fas fa-download"></i> Download Report
+                  (JSON)</button>
+                <button id="copy-smiles-btn" class="copy-button"><i class="fas fa-copy"></i> Copy SMILES</button>
+                <button id="rerun-btn" class="rerun-button"><i class="fas fa-rotate"></i> Re‑score with
+                  Constraints</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Info Section -->
+      <section class="info-section">
+        <h3>About This Demo</h3>
+        <p>
+          This Elucidator mockup mirrors the style of the Predictor and demonstrates the end‑to‑end user flow: ingest
+          peaks,
+          run candidate search and scoring, inspect assignments, and export a concise report. Swap the mock API calls
+          with your
+          backend endpoints to go live.
+        </p>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <h4>Supported Inputs</h4>
+            <p>Peaks CSV/JSON, JCAMP‑DX, and raw vendor datasets: Bruker (FID/SER + acqus/procs) and Varian (fid +
+              procpar) — folder or .zip</p>
+          </div>
+          <div class="info-item">
+            <h4>Outputs</h4>
+            <p>Ranked candidates (SMILES), assignment table, fit metrics</p>
+          </div>
+          <div class="info-item">
+            <h4>Scoring (Demo)</h4>
+            <p>Heuristic alignment of predicted vs observed shifts, multiplicity, integration</p>
+          </div>
+          <div class="info-item">
+            <h4>Next Steps</h4>
+            <p>Connect to AlgoMol‑core search + ML predictors; add solvent & coupling options</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // ——— Tabs
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.input-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(btn.dataset.tab + '-input').classList.add('active');
+      });
+    });
+
+    // ——— File label feedback helpers
+    const jcampInput = document.getElementById('jcamp-file');
+    if (jcampInput) {
+      const label = document.querySelector('label[for="jcamp-file"]');
+      const text = label.querySelector('.file-upload-text');
+      jcampInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          text.textContent = 'Selected: ' + e.target.files[0].name;
+          label.style.backgroundColor = 'rgba(26,188,156,0.2)';
+        } else {
+          text.textContent = 'Click to upload JCAMP-DX';
+          label.style.backgroundColor = 'rgba(26,188,156,0.05)';
+        }
+      });
+    }
+
+    const brukerDir = document.getElementById('bruker-dir');
+    if (brukerDir) {
+      const label = document.querySelector('label[for="bruker-dir"]');
+      const text = label.querySelector('.file-upload-text');
+      brukerDir.addEventListener('change', (e) => {
+        const n = e.target.files.length;
+        if (n > 0) {
+          text.textContent = 'Selected folder with ' + n + ' files';
+          label.style.backgroundColor = 'rgba(26,188,156,0.2)';
+        } else {
+          text.textContent = 'Select Bruker dataset folder';
+          label.style.backgroundColor = 'rgba(26,188,156,0.05)';
+        }
+      });
+    }
+
+    const brukerZip = document.getElementById('bruker-zip');
+    if (brukerZip) {
+      const label = document.querySelector('label[for="bruker-zip"]');
+      const text = label.querySelector('.file-upload-text');
+      brukerZip.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          text.textContent = 'Selected: ' + e.target.files[0].name;
+          label.style.backgroundColor = 'rgba(26,188,156,0.2)';
+        } else {
+          text.textContent = '…or upload Bruker dataset as .zip';
+          label.style.backgroundColor = 'rgba(26,188,156,0.05)';
+        }
+      });
+    }
+
+    const varianDir = document.getElementById('varian-dir');
+    if (varianDir) {
+      const label = document.querySelector('label[for="varian-dir"]');
+      const text = label.querySelector('.file-upload-text');
+      varianDir.addEventListener('change', (e) => {
+        const n = e.target.files.length;
+        if (n > 0) {
+          text.textContent = 'Selected folder with ' + n + ' files';
+          label.style.backgroundColor = 'rgba(26,188,156,0.2)';
+        } else {
+          text.textContent = 'Select Varian/Agilent dataset folder';
+          label.style.backgroundColor = 'rgba(26,188,156,0.05)';
+        }
+      });
+    }
+
+    const varianZip = document.getElementById('varian-zip');
+    if (varianZip) {
+      const label = document.querySelector('label[for="varian-zip"]');
+      const text = label.querySelector('.file-upload-text');
+      varianZip.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          text.textContent = 'Selected: ' + e.target.files[0].name;
+          label.style.backgroundColor = 'rgba(26,188,156,0.2)';
+        } else {
+          text.textContent = '…or upload Varian dataset as .zip';
+          label.style.backgroundColor = 'rgba(26,188,156,0.05)';
+        }
+      });
+    }
+
+    // ——— Mock Elucidation
+    const elucidateBtn = document.getElementById('elucidate-btn');
+    const placeholder = document.getElementById('results-placeholder');
+    const loading = document.getElementById('loading-state');
+    const display = document.getElementById('results-display');
+    const candidatesGrid = document.getElementById('candidates-grid');
+    const assignmentTable = document.getElementById('assignment-table');
+    const fitMetrics = document.getElementById('fit-metrics');
+    const penaltyMetrics = document.getElementById('penalty-metrics');
+    const structureCanvas = document.getElementById('structure-canvas-el');
+    const copySmilesBtn = document.getElementById('copy-smiles-btn');
+    const downloadBtn = document.getElementById('download-btn');
+    const rerunBtn = document.getElementById('rerun-btn');
+
+    let currentCandidateIndex = 0;
+    let candidatesData = [];
+
+    function mockElucidate(peaks, constraints) {
+      // Very simple deterministic mock using the presence of an OH‑like singlet near 5 ppm
+      const hasOH = peaks.some(p => Math.abs(p.shift - 4.9) < 0.2 && (p.mult || p.multiplicity || '').toLowerCase().startsWith('s'));
+      const ethanolScore = hasOH ? 0.93 : 0.72;
+
+      const list = [
+        {
+          name: 'Ethanol',
+          smiles: 'CCO',
+          formula: 'C2H6O',
+          score: ethanolScore,
+          assignments: [
+            { atom: 'CH3', pred: 1.26, obs: 1.25, mult: 't', int: 3 },
+            { atom: 'CH2', pred: 3.61, obs: 3.65, mult: 'q', int: 2 },
+            { atom: 'OH', pred: 4.95, obs: 4.90, mult: 's', int: 1 },
+          ],
+          metrics: { rmsd: 0.05, penalty: 0.0 }
+        },
+        {
+          name: 'Dimethyl ether',
+          smiles: 'COC',
+          formula: 'C2H6O',
+          score: 0.64,
+          assignments: [
+            { atom: 'CH3 (a)', pred: 3.35, obs: 3.65, mult: 's', int: 3 },
+            { atom: 'CH3 (b)', pred: 3.35, obs: 1.25, mult: 's', int: 3 }
+          ],
+          metrics: { rmsd: 0.42, penalty: 0.2 }
+        },
+        {
+          name: 'Acetaldehyde',
+          smiles: 'CC=O',
+          formula: 'C2H4O',
+          score: 0.51,
+          assignments: [
+            { atom: 'CHO', pred: 9.75, obs: 4.90, mult: 's', int: 1 },
+            { atom: 'CH3', pred: 2.25, obs: 1.25, mult: 'd', int: 3 }
+          ],
+          metrics: { rmsd: 2.90, penalty: 0.4 }
+        },
+        {
+          name: 'Isopropanol',
+          smiles: 'CC(C)O',
+          formula: 'C3H8O',
+          score: 0.42,
+          assignments: [
+            { atom: 'CH3 (a)', pred: 1.10, obs: 1.25, mult: 'd', int: 3 },
+            { atom: 'CH3 (b)', pred: 1.10, obs: 1.25, mult: 'd', int: 3 },
+            { atom: 'CH', pred: 3.95, obs: 3.65, mult: 'm', int: 1 },
+            { atom: 'OH', pred: 4.50, obs: 4.90, mult: 's', int: 1 }
+          ],
+          metrics: { rmsd: 0.28, penalty: 0.1 }
+        },
+        {
+          name: '1‑Propanol',
+          smiles: 'CCCO',
+          formula: 'C3H8O',
+          score: 0.41,
+          assignments: [
+            { atom: 'CH3', pred: 0.95, obs: 1.25, mult: 't', int: 3 },
+            { atom: 'CH2 (a)', pred: 1.65, obs: 3.65, mult: 'm', int: 2 },
+            { atom: 'CH2 (b)', pred: 3.65, obs: 4.90, mult: 'm', int: 2 },
+            { atom: 'OH', pred: 4.80, obs: 4.90, mult: 's', int: 1 }
+          ],
+          metrics: { rmsd: 0.46, penalty: 0.2 }
+        }
+      ];
+
+      // Apply trivial constraints
+      if (constraints && constraints.formula) {
+        const f = constraints.formula.replace(/\s+/g, '').toUpperCase();
+        return list.filter(c => c.formula.toUpperCase() === f);
+      }
+      return list;
+    }
+
+    function parseCSV(csv) {
+      const lines = csv.split(/\\r?\\n/).map(l => l.trim()).filter(Boolean);
+      const hasHeader = /shift/i.test(lines[0]);
+      const rows = (hasHeader ? lines.slice(1) : lines);
+      const peaks = [];
+      rows.forEach(r => {
+        const [s, m, i] = r.split(',').map(x => x && x.trim());
+        const shift = parseFloat(s);
+        if (!isNaN(shift)) peaks.push({ shift, mult: m || '', int: i ? parseFloat(i) : undefined });
+      });
+      return peaks;
+    }
+
+    function parseJSON(json) {
+      try {
+        const arr = JSON.parse(json);
+        return arr.map(p => ({ shift: +p.shift, mult: p.mult || p.multiplicity || '', int: +((p.int ?? p.integration) || 0) }))
+          .filter(p => !Number.isNaN(p.shift));
+      } catch { return []; }
+    }
+
+    function getPeaksFromUI() {
+      const activeTab = document.querySelector('.tab-button.active').dataset.tab;
+      if (activeTab === 'csv') return parseCSV(document.getElementById('csv-field').value || '');
+      if (activeTab === 'json') return parseJSON(document.getElementById('json-field').value || '[]');
+      if (activeTab === 'jcamp') {
+        // For demo we don’t parse JCAMP; return ethanol‑like peaks
+        return [{ shift: 1.25, mult: 't', int: 3 }, { shift: 3.65, mult: 'q', int: 2 }, { shift: 4.90, mult: 's', int: 1 }];
+      }
+      if (activeTab === 'bruker') {
+        // For demo we don’t parse Bruker directories/zips; return ethanol‑like peaks
+        return [{ shift: 1.25, mult: 't', int: 3 }, { shift: 3.65, mult: 'q', int: 2 }, { shift: 4.90, mult: 's', int: 1 }];
+      }
+      if (activeTab === 'varian') {
+        // For demo we don’t parse Varian directories/zips; return ethanol‑like peaks
+        return [{ shift: 1.25, mult: 't', int: 3 }, { shift: 3.65, mult: 'q', int: 2 }, { shift: 4.90, mult: 's', int: 1 }];
+      }
+      return [];
+    }
+
+    function drawStructurePlaceholder(name, smiles) {
+      const ctx = structureCanvas.getContext('2d');
+      ctx.clearRect(0, 0, structureCanvas.width, structureCanvas.height);
+
+      // Frame
+      ctx.strokeStyle = '#1abc9c'; ctx.lineWidth = 2;
+      ctx.strokeRect(10, 10, structureCanvas.width - 20, structureCanvas.height - 20);
+
+      // Title
+      ctx.fillStyle = '#1abc9c';
+      ctx.font = '16px Inter';
+      ctx.fillText(name + ' (placeholder)', 24, 40);
+
+      // Simple hexagon-ish shape to imply a molecule
+      const cx = structureCanvas.width / 2, cy = structureCanvas.height / 2, r = 60;
+      ctx.strokeStyle = '#1abc9c'; ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let k = 0; k < 6; k++) {
+        const a = (Math.PI / 3) * k - Math.PI / 6;
+        const x = cx + r * Math.cos(a);
+        const y = cy + r * Math.sin(a);
+        if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.closePath(); ctx.stroke();
+
+      // Side chain stub
+      ctx.beginPath();
+      ctx.moveTo(cx + r, cy);
+      ctx.lineTo(cx + r + 35, cy - 20);
+      ctx.stroke();
+
+      // SMILES footer
+      ctx.fillStyle = '#fff';
+      ctx.font = '12px JetBrains Mono';
+      ctx.fillText('SMILES: ' + smiles, 24, structureCanvas.height - 20);
+    }
+
+    function renderCandidates(list) {
+      candidatesGrid.innerHTML = '';
+      list.forEach((c, idx) => {
+        const card = document.createElement('div');
+        card.className = 'candidate-card' + (idx === 0 ? ' active' : '');
+        card.dataset.index = idx;
+
+        card.innerHTML = `
+          <div style="flex:1 1 auto; min-width:180px;">
+            <div style="font-weight:600; color:#fff;">${c.name}</div>
+            <div style="font-family:'JetBrains Mono', monospace; font-size:.85rem; color:#b0b0b0;">${c.smiles} • ${c.formula}</div>
+          </div>
+          <div class="score-bar"><div class="score-fill" style="width:${Math.round(c.score * 100)}%;"></div></div>
+          <div class="badge">Score: ${c.score.toFixed(2)}</div>
+        `;
+
+        card.addEventListener('click', () => selectCandidate(idx));
+        candidatesGrid.appendChild(card);
+      });
+    }
+
+    function selectCandidate(idx) {
+      currentCandidateIndex = idx;
+      document.querySelectorAll('.candidate-card').forEach((el, i) => {
+        el.classList.toggle('active', i === idx);
+      });
+
+      const cand = candidatesData[idx];
+      // Assignments
+      assignmentTable.innerHTML = cand.assignments.map(a => `
+        <tr>
+          <td>${a.atom}</td>
+          <td>${a.pred.toFixed(2)}</td>
+          <td>${a.obs.toFixed(2)}</td>
+          <td>${a.mult}</td>
+          <td>${a.int ?? ''}</td>
+          <td>${Math.abs(a.pred - a.obs).toFixed(2)}</td>
+        </tr>
+      `).join('');
+
+      fitMetrics.textContent = 'RMSD: ' + cand.metrics.rmsd.toFixed(2) + ' ppm';
+      penaltyMetrics.textContent = 'Penalty: ' + cand.metrics.penalty.toFixed(2);
+
+      drawStructurePlaceholder(cand.name, cand.smiles);
+    }
+
+    elucidateBtn.addEventListener('click', () => {
+      const peaks = getPeaksFromUI();
+      if (!peaks.length) { alert('Please provide valid peak data.'); return; }
+
+      placeholder.style.display = 'none';
+      display.style.display = 'none';
+      loading.style.display = 'block';
+
+      const constraints = {
+        formula: (document.getElementById('formula-field').value || '').trim(),
+        fragments: (document.getElementById('fragments-field').value || '').trim()
+      };
+
+      // Simulated async “call”
+      setTimeout(() => {
+        candidatesData = mockElucidate(peaks, constraints);
+        loading.style.display = 'none';
+        display.style.display = 'block';
+
+        if (!candidatesData.length) {
+          candidatesGrid.innerHTML = '<div class="badge">No candidates matched your constraints.</div>';
+          assignmentTable.innerHTML = '';
+          fitMetrics.textContent = 'RMSD: —'; penaltyMetrics.textContent = 'Penalty: —';
+          const ctx = structureCanvas.getContext('2d'); ctx.clearRect(0, 0, structureCanvas.width, structureCanvas.height);
+          return;
+        }
+
+        renderCandidates(candidatesData);
+        selectCandidate(0);
+      }, 3000);
+    });
+
+    copySmilesBtn.addEventListener('click', async () => {
+      if (!candidatesData.length) return;
+      const s = candidatesData[currentCandidateIndex].smiles;
+      try { await navigator.clipboard.writeText(s); copySmilesBtn.textContent = 'Copied!'; setTimeout(() => copySmilesBtn.innerHTML = '<i class="fas fa-copy"></i> Copy SMILES', 1200); }
+      catch { alert('Copy failed'); }
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const payload = {
+        input: {
+          peaks: getPeaksFromUI(),
+          formula: (document.getElementById('formula-field').value || '').trim(),
+          fragments: (document.getElementById('fragments-field').value || '').trim(),
+          timestamp: new Date().toISOString()
+        },
+        candidates: candidatesData
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'elucidator-report.json'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    rerunBtn.addEventListener('click', () => {
+      // For the demo, simply re‑order by a tiny jitter to imply re‑scoring
+      candidatesData = candidatesData.map(c => ({ ...c, score: Math.max(0, Math.min(1, c.score + (Math.random() - 0.5) * 0.04)) }))
+        .sort((a, b) => b.score - a.score);
+      renderCandidates(candidatesData);
+      selectCandidate(0);
+    });
+  </script>
+</body>
+
+</html>
