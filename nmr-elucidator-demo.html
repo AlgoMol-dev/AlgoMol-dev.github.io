@@ -596,7 +596,8 @@
                   <i class="fas fa-folder-open"></i>
                   <div class="file-upload-text">Select Bruker dataset folder</div>
                   <div class="file-upload-hint">Include required files: <code>fid</code> or <code>ser</code>, plus
-                    <code>acqus</code>/<code>procs</code> (and <code>acqu2s</code> for 2D)</div>
+                    <code>acqus</code>/<code>procs</code> (and <code>acqu2s</code> for 2D)
+                  </div>
                 </label>
               </div>
             </div>
@@ -620,7 +621,8 @@
                   <i class="fas fa-folder-open"></i>
                   <div class="file-upload-text">Select Varian/Agilent dataset folder</div>
                   <div class="file-upload-hint">Include files like <code>fid</code>, <code>procpar</code> (and processed
-                    <code>phasefile</code>/<code>text</code> if available)</div>
+                    <code>phasefile</code>/<code>text</code> if available)
+                  </div>
                 </label>
               </div>
             </div>
@@ -966,41 +968,82 @@
       return [];
     }
 
+    // Helper: draw a simple ethanol sketch
+    function drawEthanol(ctx) {
+      const w = structureCanvas.width, h = structureCanvas.height;
+      const cx = w / 2, cy = h / 2 + 10;
+
+      // Node positions (simple zig‑zag): CH3 — CH2 — O — H
+      const pCH3 = { x: cx - 110, y: cy + 10 };
+      const pCH2 = { x: cx - 40, y: cy - 15 };
+      const pO = { x: cx + 30, y: cy + 10 };
+      const pHO = { x: pO.x + 35, y: pO.y - 30 };
+
+      // Bonds
+      ctx.strokeStyle = '#1abc9c';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(pCH3.x, pCH3.y);
+      ctx.lineTo(pCH2.x, pCH2.y);
+      ctx.lineTo(pO.x, pO.y);
+      ctx.lineTo(pHO.x, pHO.y);
+      ctx.stroke();
+
+      // Atom labels
+      ctx.fillStyle = '#fff';
+      ctx.font = '14px JetBrains Mono';
+      ctx.fillText('CH3', pCH3.x - 22, pCH3.y + 4);
+      ctx.fillText('CH2', pCH2.x - 16, pCH2.y - 8);
+      ctx.fillText('OH', pO.x - 10, pO.y - 12);
+
+      // Small end caps for clarity
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(pCH3.x, pCH3.y, 2.5, 0, Math.PI * 2);
+      ctx.arc(pCH2.x, pCH2.y, 2.5, 0, Math.PI * 2);
+      ctx.arc(pO.x, pO.y, 2.5, 0, Math.PI * 2);
+      ctx.arc(pHO.x, pHO.y, 2.5, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
     function drawStructurePlaceholder(name, smiles) {
       const ctx = structureCanvas.getContext('2d');
       ctx.clearRect(0, 0, structureCanvas.width, structureCanvas.height);
 
       // Frame
-      ctx.strokeStyle = '#1abc9c'; ctx.lineWidth = 2;
+      ctx.strokeStyle = '#1abc9c';
+      ctx.lineWidth = 2;
       ctx.strokeRect(10, 10, structureCanvas.width - 20, structureCanvas.height - 20);
 
       // Title
       ctx.fillStyle = '#1abc9c';
       ctx.font = '16px Inter';
-      ctx.fillText(name + ' (placeholder)', 24, 40);
+      ctx.fillText((name || 'Candidate') + ' (sketch)', 24, 40);
 
-      // Simple hexagon-ish shape to imply a molecule
-      const cx = structureCanvas.width / 2, cy = structureCanvas.height / 2, r = 60;
-      ctx.strokeStyle = '#1abc9c'; ctx.lineWidth = 2;
-      ctx.beginPath();
-      for (let k = 0; k < 6; k++) {
-        const a = (Math.PI / 3) * k - Math.PI / 6;
-        const x = cx + r * Math.cos(a);
-        const y = cy + r * Math.sin(a);
-        if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      // Accurate sketch for ethanol; fallback to generic hexagon otherwise
+      if ((smiles && /^CCO$/.test(smiles)) || (name && /ethanol/i.test(name))) {
+        drawEthanol(ctx);
+      } else {
+        const cx = structureCanvas.width / 2, cy = structureCanvas.height / 2, r = 60;
+        ctx.strokeStyle = '#1abc9c'; ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let k = 0; k < 6; k++) {
+          const a = (Math.PI / 3) * k - Math.PI / 6;
+          const x = cx + r * Math.cos(a);
+          const y = cy + r * Math.sin(a);
+          if (k === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.closePath(); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(cx + r, cy);
+        ctx.lineTo(cx + r + 35, cy - 20);
+        ctx.stroke();
       }
-      ctx.closePath(); ctx.stroke();
-
-      // Side chain stub
-      ctx.beginPath();
-      ctx.moveTo(cx + r, cy);
-      ctx.lineTo(cx + r + 35, cy - 20);
-      ctx.stroke();
 
       // SMILES footer
       ctx.fillStyle = '#fff';
       ctx.font = '12px JetBrains Mono';
-      ctx.fillText('SMILES: ' + smiles, 24, structureCanvas.height - 20);
+      ctx.fillText('SMILES: ' + (smiles || '—'), 24, structureCanvas.height - 20);
     }
 
     function renderCandidates(list) {
